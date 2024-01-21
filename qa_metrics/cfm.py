@@ -50,7 +50,7 @@ class CFMatcher:
         features = hstack([texts, f1_scores, precisions, recalls])
         pred_probas = self.model.predict_proba(features)
 
-        return pred_probas[0]
+        return pred_probas[0][0]
 
     '''
     Returns the classifier confidence score for the candidate answer matching judgment if the reference and candidate answers

@@ -24,12 +24,39 @@ class CFMatcher:
         self.model = joblib.load(os.path.join(current_dir, 'classifier', 'lr_classifier.pkl'))
         self.tokenizer = joblib.load(os.path.join(current_dir, 'classifier', 'tf-idf_vectorizer.pkl'))
 
-            
+    def get_score(self, reference, candidate, question):
+        reference = normalize_answer(str(reference))
+        candidate = normalize_answer(str(candidate))
+        question = normalize_answer(str(question))
+
+        input_texts = []
+        f1_scores, precisions, recalls = [], [], []
+        input_texts.append("[CLS] " + candidate + " [SEP] " + reference + " [SEP] " + question + " [SEP]")
+        f1_results = f1_score_with_precision_recall(reference, candidate)
+        f, p, r = f1_results['f1'], f1_results['precision'], f1_results['recall']
+        f1_scores.append(f)
+        precisions.append(p)
+        recalls.append(r)
+
+        f1_scores = np.array(f1_scores).reshape(-1, 1)
+        precisions = np.array(precisions).reshape(-1, 1)
+        recalls = np.array(recalls).reshape(-1, 1)
+
+        texts = self.tokenizer.transform(input_texts)
+
+        '''
+        Concatenate text features with f1 features
+        '''
+        features = hstack([texts, f1_scores, precisions, recalls])
+        pred_probas = self.model.predict_proba(features)
+
+        return pred_probas[0][0]
 
     '''
-    Returns the classifier confidence score for the candidate answer matching judgment. 
+    Returns the classifier confidence score for the candidate answer matching judgment if the reference and candidate answers
+    are lists. 
     '''
-    def get_score(self, reference, candidate, question):
+    def get_scores(self, reference, candidate, question):
         # Calculate the F1 score between the referee and candidate
         confidece_scores = {}
         if isinstance(reference, list) and isinstance(candidate, list):
@@ -132,33 +159,8 @@ class CFMatcher:
                             
             return confidece_scores
         else:
-            reference = normalize_answer(str(reference))
-            candidate = normalize_answer(str(candidate))
-            question = normalize_answer(str(question))
-
-            input_texts = []
-            f1_scores, precisions, recalls = [], [], []
-            input_texts.append("[CLS] " + candidate + " [SEP] " + reference + " [SEP] " + question + " [SEP]")
-            f1_results = f1_score_with_precision_recall(reference, candidate)
-            f, p, r = f1_results['f1'], f1_results['precision'], f1_results['recall']
-            f1_scores.append(f)
-            precisions.append(p)
-            recalls.append(r)
-
-            f1_scores = np.array(f1_scores).reshape(-1, 1)
-            precisions = np.array(precisions).reshape(-1, 1)
-            recalls = np.array(recalls).reshape(-1, 1)
-
-            texts = self.tokenizer.transform(input_texts)
-
-            '''
-            Concatenate text features with f1 features
-            '''
-            features = hstack([texts, f1_scores, precisions, recalls])
-            pred_probas = self.model.predict_proba(features)
-
             confidece_scores[reference] = {}
-            confidece_scores[reference][candidate] = pred_probas[0]
+            confidece_scores[reference][candidate] = self.get_score(reference, candidate, question)
 
             return confidece_scores
 

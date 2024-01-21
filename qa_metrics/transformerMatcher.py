@@ -57,7 +57,7 @@ class TransformerMatcher:
 
         return bert_score
     
-    def get_scores(self, reference, candidates, question):
+    def get_scores(self, reference, candidate, question):
         # Calculate the F1 score between the referee and candidate
         confidece_scores = {}
         if isinstance(reference, list) and isinstance(candidate, list):
@@ -93,7 +93,7 @@ class TransformerMatcher:
 
             if reference not in confidece_scores:
                 confidece_scores[reference] = {}
-                
+
             for candidate in candidates:
                 confidece_scores[reference][candidate] = self.get_score(reference, candidate, question)
            
