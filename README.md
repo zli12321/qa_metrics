@@ -29,7 +29,7 @@ print("Exact Match: ", match_result)
 
 #### F1 Score
 ```python
-from qa_metrics.f1 import f1_match
+from qa_metrics.f1 import f1_match,f1_score_with_precision_recall
 
 f1_stats = f1_score_with_precision_recall(reference_answer[0], candidate_answer)
 print("F1 stats: ", f1_stats)
