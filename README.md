@@ -15,11 +15,51 @@ pip install qa-metrics
 
 ## Usage
 
-The python package currently provides four QA evaluation metrics Evaluation Metrics
+The python package currently provides four QA evaluation metrics.
 
-##### Exact Match
-```bash
-from
+#### Exact Match
+```python
+from qa_metrics.em import em_match
+
+reference_answer = ["Charles , Prince of Wales"]
+candidate_answer = "Prince Charles"
+match_result = ExactMatch(reference_answer, candidate_answer)
+print("Exact Match: ", match_result)
 ```
 
-🤗
+#### F1 Score
+```python
+from qa_metrics.f1 import f1_match
+
+f1_stats = f1_score_with_precision_recall(reference_answer[0], candidate_answer)
+print("F1 stats: ", f1_stats)
+
+match_result = f1_match(reference_answer, candidate_answer, threshold=0.5)
+print("F1 Match: ", match_result)
+```
+
+#### CFMatch
+```python
+from qa_metrics.cfm import CFMatcher
+
+question = "who will take the throne after the queen dies"
+cfm = CFMatcher()
+scores = cfm.get_scores(reference_answer, candidate_answer, question)
+match_result = cfm.cf_match(reference_answer, candidate_answer, question)
+print("Score: %s; CF Match: %s" % (scores, match_result))
+```
+
+#### Transformer Match
+Our fine-tuned BERT model is on 🤗 Huggingface. Our Package also supports downloading and matching directly. More Matching transformer models will be available 🔥🔥🔥
+
+```python
+from qa_metrics.transformerMacher import TransformerMatcher
+
+question = "who will take the throne after the queen dies"
+tm = TransformerMatcher("bert")
+scores = tm.get_scores(reference_answer, candidate_answer, question)
+match_result = tm.transformer_match(reference_answer, candidate_answer, question)
+print("Score: %s; CF Match: %s" % (scores, match_result))
+```
+
+
