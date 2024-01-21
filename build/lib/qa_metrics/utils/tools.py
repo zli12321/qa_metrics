@@ -1,5 +1,7 @@
 import string
 import contractions
+import requests
+import os
 
 def normalize_answer(text, lower=True):
     if isinstance(text, list):
@@ -19,3 +21,15 @@ def normalize_answer(text, lower=True):
         translator = str.maketrans('', '', string.punctuation)
         text = text.translate(translator)
         return contractions.fix(' '.join(text.split()))
+
+def download_link(file, url, name):
+    if not os.path.isfile(file):
+        print("Downloading {}...".format(name))
+        response = requests.get(url, stream=True)
+
+        if response.status_code == 200:
+            with open(file, 'wb') as f:
+                f.write(response.content)
+            print("Download {} complete.".format(name))
+        else:
+            print("Failed to download the model. Status code:", response.status_code)

@@ -1,8 +1,11 @@
 from setuptools import setup, find_packages
+from setuptools.command.install import install
+import os
+
 
 setup(
     name='qa_metrics',
-    version='0.1.1',
+    version='0.1.15',
     author='Zongxia Li',
     author_email='zli12321@umd.edu',
     description='This package provides standard and classifier-based short form QA evaluation methods',
@@ -20,7 +23,7 @@ setup(
     'requests',
     'scipy>=1.5.0',
     'scikit-learn==1.3.2',
-    'numpy==1.26.3',  # Specify numpy version here
+    'numpy==1.26.3', 
     ],
     classifiers=[
         'License :: OSI Approved :: MIT License',
@@ -29,9 +32,7 @@ setup(
         'Topic :: Software Development :: Libraries',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.9',
 )

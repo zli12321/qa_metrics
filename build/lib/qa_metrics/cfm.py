@@ -1,5 +1,5 @@
 from .f1 import f1_score_with_precision_recall
-from .utils.tools import normalize_answer
+from .utils.tools import normalize_answer, download_link
 import joblib
 from scipy.sparse import hstack
 import numpy as np
@@ -9,8 +9,22 @@ import os
 class CFMatcher:
     def __init__(self):
         current_dir = os.path.dirname(__file__)
+        model_dir = os.path.join(os.path.dirname(__file__), 'classifier')
+        model_path = os.path.join(model_dir, 'lr_classifier.pkl')
+        vectorizer_path = os.path.join(model_dir, 'tf-idf_vectorizer.pkl')
+        if not os.path.exists(model_path):
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
+            clf_url = 'https://github.com/zli12321/qa_metrics/raw/master/qa_metrics/classifier/lr_classifier'
+            vectorizer_url = 'https://github.com/zli12321/qa_metrics/raw/master/qa_metrics/classifier/tf-idf_vectorizer'
+            download_link(model_path, clf_url, 'CF Matching model')
+            download_link(vectorizer_path, vectorizer_url, 'CF Matching model tokenizer')
+
+
         self.model = joblib.load(os.path.join(current_dir, 'classifier', 'lr_classifier.pkl'))
         self.tokenizer = joblib.load(os.path.join(current_dir, 'classifier', 'tf-idf_vectorizer.pkl'))
+
+            
 
     '''
     Returns the classifier confidence score for the candidate answer matching judgment. 

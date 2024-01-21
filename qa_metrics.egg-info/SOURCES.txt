@@ -3,10 +3,10 @@ MANIFEST.in
 README.md
 setup.py
 qa_metrics/__init__.py
-qa_metrics/bem.py
 qa_metrics/cfm.py
 qa_metrics/em.py
 qa_metrics/f1.py
+qa_metrics/transformerMatcher.py
 qa_metrics.egg-info/PKG-INFO
 qa_metrics.egg-info/SOURCES.txt
 qa_metrics.egg-info/dependency_links.txt
