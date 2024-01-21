@@ -23,7 +23,7 @@ from qa_metrics.em import em_match
 
 reference_answer = ["Charles , Prince of Wales"]
 candidate_answer = "Prince Charles"
-match_result = ExactMatch(reference_answer, candidate_answer)
+match_result = em_match(reference_answer, candidate_answer)
 print("Exact Match: ", match_result)
 ```
 
