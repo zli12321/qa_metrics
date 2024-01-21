@@ -62,6 +62,9 @@ match_result = tm.transformer_match(reference_answer, candidate_answer, question
 print("Score: %s; CF Match: %s" % (scores, match_result))
 ```
 
+## Datasets
+Our Training Dataset is adapted and augmented from [Bulian et al](https://github.com/google-research-datasets/answer-equivalence-dataset). Our [dataset repo](https://github.com/zli12321/Answer_Equivalence_Dataset.git) includes the augmented training set and QA evaluation testing sets discussed in our paper. 
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE.md) - see the LICENSE file for details.
