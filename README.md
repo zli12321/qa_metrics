@@ -62,4 +62,11 @@ match_result = tm.transformer_match(reference_answer, candidate_answer, question
 print("Score: %s; CF Match: %s" % (scores, match_result))
 ```
 
+## License
+
+This project is licensed under the [MIT License](LICENSE.md) - see the LICENSE file for details.
+
+## Contact
+
+For any additional questions or comments, please contact [zli12321@umd.edu].
 
