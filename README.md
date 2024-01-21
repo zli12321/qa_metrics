@@ -53,7 +53,7 @@ print("Score: %s; CF Match: %s" % (scores, match_result))
 Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. More Matching transformer models will be available 🔥🔥🔥
 
 ```python
-from qa_metrics.transformerMacher import TransformerMatcher
+from qa_metrics.transformerMatcher import TransformerMatcher
 
 question = "who will take the throne after the queen dies"
 tm = TransformerMatcher("bert")
