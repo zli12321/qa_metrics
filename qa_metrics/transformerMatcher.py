@@ -1,10 +1,14 @@
 import os
 import torch
-from .utils.tools import normalize_answer
 from transformers import BertForSequenceClassification, BertTokenizer
+import random
+import numpy as np
 
 class TransformerMatcher:
     def __init__(self, model='bert'):
+        torch.manual_seed(0)
+        np.random.seed(0)
+        random.seed(0)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(f"Using device: {self.device}")
         '''
@@ -28,7 +32,7 @@ class TransformerMatcher:
             # self.model.to(self.device)
 
     def get_score(self, reference, candidate, question):
-        input_text = "[CLS] " + normalize_answer(str(candidate)) + " [SEP] " + normalize_answer(str(reference)) + " [SEP] " + normalize_answer(question) + " [SEP]"
+        input_text = "[CLS] " +str(candidate) + " [SEP] " +str(reference) + " [SEP] " +question + " [SEP]"
         inputs = self.tokenizer.encode_plus(
             input_text,
             add_special_tokens=True,
@@ -61,13 +65,11 @@ class TransformerMatcher:
         # Calculate the F1 score between the referee and candidate
         confidece_scores = {}
         if isinstance(reference, list) and isinstance(candidate, list):
-            references = [normalize_answer(str(ele)) for ele in reference]
-            candidates = [normalize_answer(str(ele)) for ele in candidate]
-            question = normalize_answer(str(question))
+            references = [str(ele) for ele in reference]
+            candidates = [str(ele) for ele in candidate]
+            question =str(question)
 
             for candidate in candidates:
-                input_texts = []
-                f1_scores, precisions, recalls = [], [], []
                 for reference in references:
                     if reference not in confidece_scores:
                         confidece_scores[reference] = {}
@@ -75,21 +77,19 @@ class TransformerMatcher:
                         
             return confidece_scores
         elif isinstance(reference, list):
-            references = [normalize_answer(str(ele)) for ele in reference]
-            candidates = normalize_answer(str(candidate))
-            question = normalize_answer(str(question))
+            references = [str(ele) for ele in reference]
+            candidates =str(candidate)
+            question =str(question)
 
-            input_texts = []
-            f1_scores, precisions, recalls = [], [], []
             for reference in references:
                 confidece_scores[reference] = {}
                 confidece_scores[reference][candidate] = self.get_score(reference, candidate, question)
             
             return confidece_scores
         elif isinstance(candidate, list):
-            candidates = [normalize_answer(str(ele)) for ele in candidate]
-            reference = normalize_answer(str(reference))
-            question = normalize_answer(str(question))
+            candidates = [str(ele) for ele in candidate]
+            reference =str(reference)
+            question =str(question)
 
             if reference not in confidece_scores:
                 confidece_scores[reference] = {}
@@ -105,6 +105,36 @@ class TransformerMatcher:
             return confidece_scores
 
     def transformer_match(self, reference, candidate, question, threshold=0.5):
-        bert_score = self.get_score(reference, candidate, question)
-        binary_class = True if bert_score > threshold else False
-        return binary_class
+        judgment = False
+        if isinstance(reference, list) and isinstance(candidate, list):
+            candidates = [str(ele) for ele in candidate]
+            references = [str(ele) for ele in reference]
+            for candidate in candidates:
+                if judgment == False:
+                    for reference in references:
+                        bert_score = self.get_score(reference, candidate, question)
+                        if bert_score > threshold:
+                            judgment = True
+                            
+            return judgment
+        elif isinstance(reference, list):
+            references = [str(ele) for ele in reference]
+            candidate =str(candidate)
+            for reference in references:
+                bert_score = self.get_score(reference, candidate, question)
+                if bert_score > threshold:
+                    judgment = True
+                    
+            return judgment
+        elif isinstance(candidate, list):
+            candidates = [str(ele) for ele in candidate]
+            reference =str(reference)
+            for candidate in candidates:
+                bert_score = self.get_score(reference, candidate, question)
+                if bert_score > threshold:
+                    judgment = True
+                    
+            return judgment
+        else:
+            bert_score = self.get_score(reference, candidate, question)
+            return True if bert_score > threshold else False
