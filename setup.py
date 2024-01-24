@@ -5,7 +5,7 @@ import os
 
 setup(
     name='qa_metrics',
-    version='0.1.21',
+    version='0.1.22',
     author='Zongxia Li',
     author_email='zli12321@umd.edu',
     description='This package provides standard and classifier-based short form QA evaluation methods',
@@ -23,7 +23,7 @@ setup(
     'requests',
     'scipy>=1.5.0',
     'scikit-learn==1.3.2',
-    'numpy==1.26.3', 
+    'numpy'
     ],
     classifiers=[
         'License :: OSI Approved :: MIT License',
@@ -32,7 +32,11 @@ setup(
         'Topic :: Software Development :: Libraries',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
     ],
-    python_requires='>=3.9',
-)
+    python_requires='>=3.6',
+
+    )
