@@ -5,7 +5,7 @@
 
 QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating question-answering models. It provides various basic metrics to assess the performance of QA models. Check out our **CFMatcher**, a matching method going beyond token-level matching and is more efficient than LLM matchings but still retains competitive evaluation performance of transformer LLM models.
 
-If you find this repo avialable, please cite our paper:
+If you find this repo available, please cite our paper:
 ```bibtex
 @misc{li2024cfmatch,
   title={CFMatch: Aligning Automated Answer Equivalence Evaluation with Expert Judgments For Open-Domain Question Answering}, 
