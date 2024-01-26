@@ -51,13 +51,12 @@ print("Score: %s; CF Match: %s" % (scores, match_result))
 ```
 
 #### Transformer Match
-Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. More Matching transformer models will be available 🔥🔥🔥
+Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. Now distilbert and distilroberta are also available 🔥🔥🔥
 
 ```python
 from qa_metrics.transformerMatcher import TransformerMatcher
 
 question = "who will take the throne after the queen dies"
-'''Now also supports distilroberta'''
 tm = TransformerMatcher("bert")
 scores = tm.get_scores(reference_answer, candidate_answer, question)
 match_result = tm.transformer_match(reference_answer, candidate_answer, question)
@@ -79,7 +78,7 @@ If you find this repo avialable, please cite:
 ## Updates
 - [01/24/24] 🔥 The full paper is uploaded and can be accessed [here]([https://arxiv.org/abs/2310.14566](https://arxiv.org/abs/2401.13170)). The dataset is expanded and leaderboard is updated.
 - Our Training Dataset is adapted and augmented from [Bulian et al](https://github.com/google-research-datasets/answer-equivalence-dataset). Our [dataset repo](https://github.com/zli12321/Answer_Equivalence_Dataset.git) includes the augmented training set and QA evaluation testing sets discussed in our paper.
-- Now our model supports Distilroberta, a smaller and more robust matching model than Bert!
+- Now our model supports [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), a smaller and more robust matching model than Bert!
 
 ## License
 
