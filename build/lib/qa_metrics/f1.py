@@ -1,5 +1,8 @@
 from .utils.tools import normalize_answer
 
+'''
+Return the F1 score, precision, and recall of the candidate answer given the reference answer
+'''
 def f1_score_with_precision_recall(reference, candidate):
     # Split the strings into sets of words
     reference = normalize_answer(str(reference))
@@ -21,9 +24,15 @@ def f1_score_with_precision_recall(reference, candidate):
 
     return {'f1': f1_score, 'precision': precision, 'recall': recall}
 
+
+'''
+Return the F1 score of the candidate answer given the reference answer
+'''
 def f1_score(reference, candidate):
     f1_stats = f1_score_with_precision_recall(reference, candidate)
     return f1_stats['f1']
+
+
 
 '''
 Given a reference answer and a candidate answer, return True if the F1 score is greater than the threshold

@@ -25,9 +25,17 @@ class TransformerMatcher:
             self.tokenizer = BertTokenizer.from_pretrained(model_path, cache_dir=model_dir)
         if model == 'distilbert':
             from transformers import DistilBertForSequenceClassification, DistilBertConfig, DistilBertTokenizer
+            model_dir = os.path.join(current_dir, 'transformer_models/distilbert')
+
+            # Ensure the target directory exists
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
+            
+            model_path = 'Zongxia/answer_equivalence_distilbert'
+
             self.tokenizer = DistilBertTokenizer.from_pretrained(model_path)
             config = DistilBertConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
-            self.model = DistilBertForSequenceClassification.from_pretrained(model_path, config=config)
+            self.model = DistilBertForSequenceClassification.from_pretrained(model_path, config=config).to(self.device)
         elif model == 'distilroberta':
             from transformers import RobertaForSequenceClassification, RobertaTokenizer, RobertaConfig
             model_dir = os.path.join(current_dir, 'transformer_models/distilroberta')

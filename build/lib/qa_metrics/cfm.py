@@ -24,6 +24,11 @@ class CFMatcher:
         self.model = joblib.load(os.path.join(current_dir, 'classifier', 'lr_classifier.pkl'))
         self.tokenizer = joblib.load(os.path.join(current_dir, 'classifier', 'tf-idf_vectorizer.pkl'))
 
+
+    '''
+    Return the confidence score between the reference and candidate answers. 
+    reference, candidate, and question are strings.
+    '''
     def get_score(self, reference, candidate, question):
         reference = normalize_answer(str(reference))
         candidate = normalize_answer(str(candidate))
@@ -52,9 +57,10 @@ class CFMatcher:
 
         return pred_probas[0][0]
 
+
     '''
     Returns the classifier confidence score for the candidate answer matching judgment if the reference and candidate answers
-    are lists. 
+    are lists. The reference and candidate answers can lists of strings or just strings. The question is a string.
     '''
     def get_scores(self, reference, candidate, question):
         # Calculate the F1 score between the referee and candidate
@@ -163,6 +169,23 @@ class CFMatcher:
             confidece_scores[reference][candidate] = self.get_score(reference, candidate, question)
 
             return confidece_scores
+
+    '''
+    Given a list of reference, candidate, and a question, return the pair with the highest confidence score.
+    '''
+    def get_highest_score(self, reference, candidate, question):
+        confidence_scores = self.get_scores(reference, candidate, question)
+
+        max_score = -1
+        max_pair = (None, None)
+
+        for reference, candidates in confidence_scores.items():
+            for candidate, score in candidates.items():
+                if score > max_score:
+                    max_score = score
+                    max_pair = (reference, candidate)
+
+        return max_pair, max_score
 
     '''
     Input your reference and candidate answers, and the question.
