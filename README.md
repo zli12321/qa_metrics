@@ -61,7 +61,7 @@ question = "who will take the throne after the queen dies"
 tm = TransformerMatcher("bert")
 scores = tm.get_scores(reference_answer, candidate_answer, question)
 match_result = tm.transformer_match(reference_answer, candidate_answer, question)
-print("Score: %s; CF Match: %s" % (scores, match_result))
+print("Score: %s; bert Match: %s" % (scores, match_result))
 ```
 
 If you find this repo avialable, please cite:
