@@ -64,7 +64,7 @@ match_result = tm.transformer_match(reference_answer, candidate_answer, question
 print("Score: %s; CF Match: %s" % (scores, match_result))
 ```
 
-If you find this repo avialable, please cite our paper:
+If you find this repo avialable, please cite:
 ```bibtex
 @misc{li2024cfmatch,
   title={CFMatch: Aligning Automated Answer Equivalence Evaluation with Expert Judgments For Open-Domain Question Answering}, 
