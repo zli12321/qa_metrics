@@ -1,6 +1,4 @@
 import os
-from transformers import BertForSequenceClassification, BertTokenizer
-from transformers import RobertaForSequenceClassification, RobertaTokenizer
 from .em import em_match
 import torch
 
@@ -14,24 +12,64 @@ class TransformerMatcher:
         current_dir = os.path.dirname(__file__)
         
         if model == 'bert':
+            from transformers import BertForSequenceClassification, BertTokenizer, BertConfig
             model_dir = os.path.join(current_dir, 'transformer_models/bert')
             
             # Ensure the target directory exists
             if not os.path.exists(model_dir):
                 os.makedirs(model_dir)
-
-            self.model = BertForSequenceClassification.from_pretrained('Zongxia/answer_equivalence_bert', cache_dir=model_dir).to(self.device)
-            self.tokenizer = BertTokenizer.from_pretrained('Zongxia/answer_equivalence_bert', cache_dir=model_dir)
+            
+            model_path = 'Zongxia/answer_equivalence_bert'
+            config= BertConfig.from_pretrained(model_path)
+            self.model = BertForSequenceClassification.from_pretrained(model_path, config=config, cache_dir=model_dir).to(self.device)
+            self.tokenizer = BertTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+        if model == 'distilbert':
+            from transformers import DistilBertForSequenceClassification, DistilBertConfig, DistilBertTokenizer
+            self.tokenizer = DistilBertTokenizer.from_pretrained(model_path)
+            config = DistilBertConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            self.model = DistilBertForSequenceClassification.from_pretrained(model_path, config=config)
         elif model == 'distilroberta':
+            from transformers import RobertaForSequenceClassification, RobertaTokenizer, RobertaConfig
             model_dir = os.path.join(current_dir, 'transformer_models/distilroberta')
             
             # Ensure the target directory exists
             if not os.path.exists(model_dir):
                 os.makedirs(model_dir)
 
-            self.model = RobertaForSequenceClassification.from_pretrained('Zongxia/answer_equivalence_distilroberta', cache_dir=model_dir).to(self.device)
-            self.tokenizer = RobertaTokenizer.from_pretrained('Zongxia/answer_equivalence_distilroberta', cache_dir=model_dir)
+            model_path = 'Zongxia/answer_equivalence_distilroberta'
 
+            config = RobertaConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            self.model = RobertaForSequenceClassification.from_pretrained(model_path, cache_dir=model_dir).to(self.device)
+            self.tokenizer = RobertaTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+        elif model == 'roberta':
+            from transformers import RobertaForSequenceClassification, RobertaTokenizer, RobertaConfig
+            model_dir = os.path.join(current_dir, 'transformer_models/roberta')
+            
+            # Ensure the target directory exists
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
+
+            model_path = 'Zongxia/answer_equivalence_roberta'
+            config = RobertaConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            self.model = RobertaForSequenceClassification.from_pretrained(model_path, cache_dir=model_dir).to(self.device)
+            self.tokenizer = RobertaTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+        elif model == 'roberta-large':
+            from transformers import RobertaForSequenceClassification, RobertaTokenizer, RobertaConfig
+            model_dir = os.path.join(current_dir, 'transformer_models/roberta-large')
+            
+            # Ensure the target directory exists
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
+
+            model_path = 'Zongxia/answer_equivalence_roberta-large'
+            config = RobertaConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            self.model = RobertaForSequenceClassification.from_pretrained(model_path, cache_dir=model_dir).to(self.device)
+            self.tokenizer = RobertaTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+
+    '''
+    Return the confidence score between the reference and candidate answers. 
+    reference, candidate, and question are strings.
+    '''
     def get_score(self, reference, candidate, question):
         if em_match(reference, candidate) == True:
             return 1.0
@@ -64,6 +102,10 @@ class TransformerMatcher:
 
         return score
     
+    '''
+    Returns the classifier confidence score for the candidate answer matching judgment if the reference and candidate answers
+    are lists. The reference and candidate answers can lists of strings or just strings. The question is a string.
+    '''
     def get_scores(self, reference, candidate, question):
         # Calculate the F1 score between the referee and candidate
         confidece_scores = {}
@@ -107,6 +149,27 @@ class TransformerMatcher:
 
             return confidece_scores
 
+    '''
+    Given a list of reference, candidate, and a question, return the pair with the highest confidence score.
+    '''
+    def get_highest_score(self, reference, candidate, question):
+        confidence_scores = self.get_scores(reference, candidate, question)
+
+        max_score = -1
+        max_pair = (None, None)
+
+        for reference, candidates in confidence_scores.items():
+            for candidate, score in candidates.items():
+                if score > max_score:
+                    max_score = score
+                    max_pair = (reference, candidate)
+
+        return max_pair, max_score
+
+    '''
+    Input your reference and candidate answers, and the question.
+    Return True if the candidate answer is above the threshold value. Else, False.
+    '''
     def transformer_match(self, reference, candidate, question, threshold=0.5):
         if em_match(reference, candidate) == True:
             return True
