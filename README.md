@@ -3,19 +3,8 @@
 [![PyPI version qa-metrics](https://img.shields.io/pypi/v/qa-metrics.svg)](https://pypi.org/project/qa-metrics/) 
 
 
-QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating question-answering models. It provides various basic metrics to assess the performance of QA models. Check out our [**CFMatcher**](https://arxiv.org/abs/2401.13170), a matching method going beyond token-level matching and is more efficient than LLM matchings but still retains competitive evaluation performance of transformer LLM models.
+QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating question-answering models. It provides various basic metrics to assess the performance of QA models. Check out our paper [**CFMatcher**](https://arxiv.org/abs/2401.13170), a matching method going beyond token-level matching and is more efficient than LLM matchings but still retains competitive evaluation performance of transformer LLM models.
 
-If you find this repo avialable, please cite our paper:
-```bibtex
-@misc{li2024cfmatch,
-  title={CFMatch: Aligning Automated Answer Equivalence Evaluation with Expert Judgments For Open-Domain Question Answering}, 
-  author={Zongxia Li and Ishani Mondal and Yijun Liang and Huy Nghiem and Jordan Boyd-Graber},
-  year={2024},
-  eprint={2401.13170},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL}
-}
-```
 
 ## Installation
 
@@ -75,6 +64,17 @@ match_result = tm.transformer_match(reference_answer, candidate_answer, question
 print("Score: %s; CF Match: %s" % (scores, match_result))
 ```
 
+If you find this repo avialable, please cite our paper:
+```bibtex
+@misc{li2024cfmatch,
+  title={CFMatch: Aligning Automated Answer Equivalence Evaluation with Expert Judgments For Open-Domain Question Answering}, 
+  author={Zongxia Li and Ishani Mondal and Yijun Liang and Huy Nghiem and Jordan Boyd-Graber},
+  year={2024},
+  eprint={2401.13170},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL}
+}
+```
 
 ## Updates
 - [01/24/24] 🔥 The full paper is uploaded and can be accessed [here]([https://arxiv.org/abs/2310.14566](https://arxiv.org/abs/2401.13170)). The dataset is expanded and leaderboard is updated.
