@@ -51,7 +51,7 @@ print("Score: %s; CF Match: %s" % (scores, match_result))
 ```
 
 #### Transformer Match
-Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. Now distilbert and distilroberta are also available 🔥🔥🔥
+Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), and roberta are also supported now! 🔥🔥🔥
 
 ```python
 from qa_metrics.transformerMatcher import TransformerMatcher
