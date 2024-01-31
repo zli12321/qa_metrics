@@ -1,7 +1,7 @@
 # QA-Evaluation-Metrics
 
 [![PyPI version qa-metrics](https://img.shields.io/pypi/v/qa-metrics.svg)](https://pypi.org/project/qa-metrics/) 
-
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/17b7vrZqH0Yun2AJaOXydYZxr3cw20Ga6?usp=sharing)
 
 QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating question-answering models. It provides various basic metrics to assess the performance of QA models. Check out our paper [**CFMatcher**](https://arxiv.org/abs/2401.13170), a matching method going beyond token-level matching and is more efficient than LLM matchings but still retains competitive evaluation performance of transformer LLM models.
 
