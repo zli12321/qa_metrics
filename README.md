@@ -65,13 +65,13 @@ print("Score: %s; bert Match: %s" % (scores, match_result))
 
 If you find this repo avialable, please cite:
 ```bibtex
-@misc{li2024cfmatch,
-  title={CFMatch: Aligning Automated Answer Equivalence Evaluation with Expert Judgments For Open-Domain Question Answering}, 
-  author={Zongxia Li and Ishani Mondal and Yijun Liang and Huy Nghiem and Jordan Boyd-Graber},
-  year={2024},
-  eprint={2401.13170},
-  archivePrefix={arXiv},
-  primaryClass={cs.CL}
+@misc{li2024panda,
+      title={PANDA (Pedantic ANswer-correctness Determination and Adjudication):Improving Automatic Evaluation for Question Answering and Text Generation}, 
+      author={Zongxia Li and Ishani Mondal and Yijun Liang and Huy Nghiem and Jordan Lee Boyd-Graber},
+      year={2024},
+      eprint={2402.11161},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
 }
 ```
 
