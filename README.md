@@ -22,10 +22,13 @@ The python package currently provides four QA evaluation metrics.
 ```python
 from qa_metrics.em import em_match
 
-reference_answer = ["Charles , Prince of Wales"]
-candidate_answer = "Prince Charles"
+reference_answer = ["The Frog Prince", "The Princess and the Frog"]
+candidate_answer = "The movie \"The Princess and the Frog\" is loosely based off the Brother Grimm's \"Iron Henry\""
 match_result = em_match(reference_answer, candidate_answer)
 print("Exact Match: ", match_result)
+'''
+Exact Match:  False
+'''
 ```
 
 #### F1 Score
@@ -34,20 +37,29 @@ from qa_metrics.f1 import f1_match,f1_score_with_precision_recall
 
 f1_stats = f1_score_with_precision_recall(reference_answer[0], candidate_answer)
 print("F1 stats: ", f1_stats)
+'''
+F1 stats:  {'f1': 0.25, 'precision': 0.6666666666666666, 'recall': 0.15384615384615385}
+'''
 
 match_result = f1_match(reference_answer, candidate_answer, threshold=0.5)
 print("F1 Match: ", match_result)
+'''
+F1 Match:  False
+'''
 ```
 
 #### CFMatch
 ```python
 from qa_metrics.cfm import CFMatcher
 
-question = "who will take the throne after the queen dies"
+question = "Which movie is loosley based off the Brother Grimm's Iron Henry?"
 cfm = CFMatcher()
 scores = cfm.get_scores(reference_answer, candidate_answer, question)
 match_result = cfm.cf_match(reference_answer, candidate_answer, question)
 print("Score: %s; CF Match: %s" % (scores, match_result))
+'''
+Score: {'the frog prince': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.7131625951317375}, 'the princess and the frog': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.854451712151719}}; CF Match: True
+'''
 ```
 
 #### Transformer Match
@@ -56,11 +68,14 @@ Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxi
 ```python
 from qa_metrics.transformerMatcher import TransformerMatcher
 
-question = "who will take the throne after the queen dies"
+question = "Which movie is loosley based off the Brother Grimm's Iron Henry?"
 tm = TransformerMatcher("bert")
 scores = tm.get_scores(reference_answer, candidate_answer, question)
 match_result = tm.transformer_match(reference_answer, candidate_answer, question)
 print("Score: %s; bert Match: %s" % (scores, match_result))
+'''
+Score: {'The Frog Prince': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.6934309}, 'The Princess and the Frog': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.7400551}}; TM Match: True
+'''
 ```
 
 If you find this repo avialable, please cite:
