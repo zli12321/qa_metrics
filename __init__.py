@@ -4,7 +4,7 @@ import requests
 import os
 from .qa_metrics.em import em_match
 from .qa_metrics.f1 import f1_match
-from .qa_metrics.cfm import CFMatcher
+from .qa_metrics.panda import CFMatcher
 from .qa_metrics.transformerMatcher import TransformerMatcher  # assuming bem.py contains a function to download BERT
 
 def download(model_name):

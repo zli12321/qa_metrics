@@ -6,7 +6,7 @@ import numpy as np
 import os
 
 
-class CFMatcher:
+class PEDANT:
     def __init__(self):
         current_dir = os.path.dirname(__file__)
         model_dir = os.path.join(os.path.dirname(__file__), 'classifier')
