@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: qa-metrics
-Version: 0.1.35
+Version: 0.1.36
 Summary: This package provides standard and classifier-based short form QA evaluation methods
 Home-page: https://github.com/zli12321/qa_metrics
 Author: Zongxia Li
