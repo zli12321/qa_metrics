@@ -1,0 +1,127 @@
+Metadata-Version: 2.1
+Name: qa-metrics
+Version: 0.1.29
+Summary: This package provides standard and classifier-based short form QA evaluation methods
+Home-page: https://github.com/zli12321/qa_metrics
+Author: Zongxia Li
+Author-email: zli12321@umd.edu
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# QA-Evaluation-Metrics
+
+[![PyPI version qa-metrics](https://img.shields.io/pypi/v/qa-metrics.svg)](https://pypi.org/project/qa-metrics/) 
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/17b7vrZqH0Yun2AJaOXydYZxr3cw20Ga6?usp=sharing)
+
+QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating question-answering models. It provides various basic metrics to assess the performance of QA models. Check out our paper [**PANDA**](https://arxiv.org/abs/2402.11161), an efficient QA evaluation that retains competitive evaluation performance of transformer LLM models.
+
+
+## Installation
+
+To install the package, run the following command:
+
+```bash
+pip install qa-metrics
+```
+
+## Usage
+
+The python package currently provides four QA evaluation metrics.
+
+#### Exact Match
+```python
+from qa_metrics.em import em_match
+
+reference_answer = ["The Frog Prince", "The Princess and the Frog"]
+candidate_answer = "The movie \"The Princess and the Frog\" is loosely based off the Brother Grimm's \"Iron Henry\""
+match_result = em_match(reference_answer, candidate_answer)
+print("Exact Match: ", match_result)
+'''
+Exact Match:  False
+'''
+```
+
+#### F1 Score
+```python
+from qa_metrics.f1 import f1_match,f1_score_with_precision_recall
+
+f1_stats = f1_score_with_precision_recall(reference_answer[0], candidate_answer)
+print("F1 stats: ", f1_stats)
+'''
+F1 stats:  {'f1': 0.25, 'precision': 0.6666666666666666, 'recall': 0.15384615384615385}
+'''
+
+match_result = f1_match(reference_answer, candidate_answer, threshold=0.5)
+print("F1 Match: ", match_result)
+'''
+F1 Match:  False
+'''
+```
+
+#### CFMatch
+```python
+from qa_metrics.cfm import CFMatcher
+
+question = "Which movie is loosley based off the Brother Grimm's Iron Henry?"
+cfm = CFMatcher()
+scores = cfm.get_scores(reference_answer, candidate_answer, question)
+match_result = cfm.cf_match(reference_answer, candidate_answer, question)
+print("Score: %s; CF Match: %s" % (scores, match_result))
+'''
+Score: {'the frog prince': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.7131625951317375}, 'the princess and the frog': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.854451712151719}}; CF Match: True
+'''
+```
+
+#### Transformer Match
+Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), [roberta](https://huggingface.co/Zongxia/answer_equivalence_roberta), and [roberta-large](https://huggingface.co/Zongxia/answer_equivalence_roberta-large) are also supported now! 🔥🔥🔥
+
+```python
+from qa_metrics.transformerMatcher import TransformerMatcher
+
+question = "Which movie is loosley based off the Brother Grimm's Iron Henry?"
+tm = TransformerMatcher("bert")
+scores = tm.get_scores(reference_answer, candidate_answer, question)
+match_result = tm.transformer_match(reference_answer, candidate_answer, question)
+print("Score: %s; bert Match: %s" % (scores, match_result))
+'''
+Score: {'The Frog Prince': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.6934309}, 'The Princess and the Frog': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.7400551}}; TM Match: True
+'''
+```
+
+If you find this repo avialable, please cite:
+```bibtex
+@misc{li2024panda,
+      title={PANDA (Pedantic ANswer-correctness Determination and Adjudication):Improving Automatic Evaluation for Question Answering and Text Generation}, 
+      author={Zongxia Li and Ishani Mondal and Yijun Liang and Huy Nghiem and Jordan Lee Boyd-Graber},
+      year={2024},
+      eprint={2402.11161},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
+
+## Updates
+- [01/24/24] 🔥 The full paper is uploaded and can be accessed [here]([https://arxiv.org/abs/2310.14566](https://arxiv.org/abs/2401.13170)). The dataset is expanded and leaderboard is updated.
+- Our Training Dataset is adapted and augmented from [Bulian et al](https://github.com/google-research-datasets/answer-equivalence-dataset). Our [dataset repo](https://github.com/zli12321/Answer_Equivalence_Dataset.git) includes the augmented training set and QA evaluation testing sets discussed in our paper.
+- Now our model supports [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), a smaller and faster matching model than Bert!
+- Now our model supports [roberta](https://huggingface.co/Zongxia/answer_equivalence_roberta), [roberta-large](https://huggingface.co/Zongxia/answer_equivalence_roberta-large), a larger and more robust matching model than Bert!
+
+## License
+
+This project is licensed under the [MIT License](LICENSE.md) - see the LICENSE file for details.
+
+## Contact
+
+For any additional questions or comments, please contact [zli12321@umd.edu].
+

@@ -1,0 +1,6 @@
+contractions>=0.0.1
+joblib
+requests
+scipy>=1.5.0
+scikit-learn==1.3.2
+numpy
