@@ -48,17 +48,27 @@ F1 Match:  False
 '''
 ```
 
-#### CFMatch
+#### PANDA Match
 ```python
-from qa_metrics.cfm import CFMatcher
+from qa_metrics.pedant import PEDANT
 
 question = "Which movie is loosley based off the Brother Grimm's Iron Henry?"
-cfm = CFMatcher()
-scores = cfm.get_scores(reference_answer, candidate_answer, question)
-match_result = cfm.cf_match(reference_answer, candidate_answer, question)
-print("Score: %s; CF Match: %s" % (scores, match_result))
+pedant = PEDANT()
+scores = pedant.get_scores(reference_answer, candidate_answer, question)
+max_pair, highest_scores = pedant.get_highest_score(reference_answer, candidate_answer, question)
+match_result = pedant.evaluate(reference_answer, candidate_answer, question)
+print("Max Pair: %s; Highest Score: %s" % (max_pair, highest_scores))
+print("Score: %s; PANDA Match: %s" % (scores, match_result))
 '''
-Score: {'the frog prince': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.7131625951317375}, 'the princess and the frog': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.854451712151719}}; CF Match: True
+Max Pair: ('the princess and the frog', 'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"'); Highest Score: 0.854451712151719
+Score: {'the frog prince': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.7131625951317375}, 'the princess and the frog': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.854451712151719}}; PANDA Match: True
+'''
+```
+
+```python
+print(pedant.get_score(reference_answer[0], candidate_answer, question))
+'''
+0.7122460127464126
 '''
 ```
 
