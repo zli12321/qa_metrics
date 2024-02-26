@@ -9,20 +9,21 @@ import os
 class PEDANT:
     def __init__(self):
         current_dir = os.path.dirname(__file__)
-        model_dir = os.path.join(os.path.dirname(__file__), 'classifier')
+        model_dir = os.path.join(current_dir, 'classifier')
         model_path = os.path.join(model_dir, 'lr_classifier.pkl')
         vectorizer_path = os.path.join(model_dir, 'tf-idf_vectorizer.pkl')
         if not os.path.exists(model_path):
             if not os.path.exists(model_dir):
                 os.makedirs(model_dir)
-            clf_url = 'https://github.com/zli12321/qa_metrics/raw/master/qa_metrics/classifier/lr_classifier'
-            vectorizer_url = 'https://github.com/zli12321/qa_metrics/raw/master/qa_metrics/classifier/tf-idf_vectorizer'
+            clf_url = 'https://github.com/zli12321/qa_metrics/blob/master/qa_metrics/classifier/lr_classifier.pkl'
+            vectorizer_url = 'https://github.com/zli12321/qa_metrics/blob/master/qa_metrics/classifier/tf-idf_vectorizer.pkl'
+            print('Downloaded model path: ', model_path)
             download_link(model_path, clf_url, 'PANDA model')
             download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer')
 
 
-        self.model = joblib.load(os.path.join(current_dir, 'classifier', 'lr_classifier.pkl'))
-        self.tokenizer = joblib.load(os.path.join(current_dir, 'classifier', 'tf-idf_vectorizer.pkl'))
+        self.model = joblib.load(model_path)
+        self.tokenizer = joblib.load(tokenizer_path)
 
 
     '''
