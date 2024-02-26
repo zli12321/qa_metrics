@@ -15,15 +15,15 @@ class PEDANT:
         if not os.path.exists(model_path):
             if not os.path.exists(model_dir):
                 os.makedirs(model_dir)
-            clf_url = 'https://github.com/zli12321/qa_metrics/blob/master/qa_metrics/classifier/lr_classifier.pkl'
-            vectorizer_url = 'https://github.com/zli12321/qa_metrics/blob/master/qa_metrics/classifier/tf-idf_vectorizer.pkl'
+            clf_url = 'https://github.com/zli12321/qa_metrics/blob/master/qa_metrics/classifier/lr_classifier'
+            vectorizer_url = 'https://github.com/zli12321/qa_metrics/blob/master/qa_metrics/classifier/tf-idf_vectorizer'
             print('Downloaded model path: ', model_path)
             download_link(model_path, clf_url, 'PANDA model')
             download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer')
 
 
         self.model = joblib.load(model_path)
-        self.tokenizer = joblib.load(tokenizer_path)
+        self.tokenizer = joblib.load(vectorizer_path)
 
 
     '''
