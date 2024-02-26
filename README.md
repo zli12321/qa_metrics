@@ -66,7 +66,7 @@ Score: {'the frog prince': {'The movie "The Princess and the Frog" is loosely ba
 ```
 
 ```python
-print(pedant.get_score(reference_answer[0], candidate_answer, question))
+print(pedant.get_score(reference_answer[1], candidate_answer, question))
 '''
 0.7122460127464126
 '''
