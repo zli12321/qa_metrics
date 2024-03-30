@@ -5,7 +5,7 @@ import os
 
 setup(
     name='qa_metrics',
-    version='0.1.37',
+    version='0.1.38',
     author='Zongxia Li',
     author_email='zli12321@umd.edu',
     description='This package provides standard and classifier-based short form QA evaluation methods',

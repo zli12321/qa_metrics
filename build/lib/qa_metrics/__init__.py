@@ -2,6 +2,7 @@ import requests
 import os
 from .utils.tools import download_link
 
+
 def download(model_name):
     # if model_name.lower() == 'bert':
     #     # Download BERT model
