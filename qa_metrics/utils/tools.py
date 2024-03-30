@@ -25,13 +25,13 @@ def normalize_answer(text, lower=True):
 
 def download_link(file, url, name):
     if not os.path.isfile(file):
-        print("Downloading {}...".format(name))
+        # print("Downloading {}...".format(name))
         response = requests.get(url, stream=True)
 
         if response.status_code == 200:
             with open(file, 'wb') as f:
                 f.write(response.content)
-            print("Download {} complete.".format(name))
+            # print("Download {} complete.".format(name))
         else:
             print("Failed to download the model. Status code:", response.status_code)
 
