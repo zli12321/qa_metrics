@@ -2,6 +2,7 @@ import string
 import contractions
 import requests
 import os
+from datetime import datetime
 
 def normalize_answer(text, lower=True):
     if isinstance(text, list):
@@ -33,3 +34,20 @@ def download_link(file, url, name):
             print("Download {} complete.".format(name))
         else:
             print("Failed to download the model. Status code:", response.status_code)
+
+def file_needs_update(url, file_path):
+    """
+    Check if the file at the given path needs to be updated based on the
+    Last-Modified header from the file URL.
+    """
+    try:
+        response = requests.head(url)
+        if response.status_code == 200 and 'Last-Modified' in response.headers:
+            remote_last_modified = requests.utils.parsedate_to_datetime(response.headers['Last-Modified'])
+            if not os.path.exists(file_path):
+                return True  # File does not exist, needs download.
+            local_last_modified = datetime.fromtimestamp(os.path.getmtime(file_path), tz=remote_last_modified.tzinfo)
+            return remote_last_modified > local_last_modified
+    except requests.RequestException as e:
+        print(f"Error checking if file needs update: {e}")
+    return False  # Default to not updating if we can't determine.

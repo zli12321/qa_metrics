@@ -1,5 +1,5 @@
 from .f1 import f1_score_with_precision_recall
-from .utils.tools import normalize_answer, download_link
+from .utils.tools import normalize_answer, download_link, file_needs_update
 import joblib
 from scipy.sparse import hstack
 import numpy as np
@@ -8,82 +8,41 @@ import requests
 
 
 class PEDANT:
-    def __init__(self):
-        current_dir = os.path.dirname(__file__)
-        model_dir = os.path.join(current_dir, 'classifier')
-        model_path = os.path.join(model_dir, 'lr_classifier.pkl')
-        vectorizer_path = os.path.join(model_dir, 'tf-idf_vectorizer.pkl')
-
-        # Corrected URLs to point directly to the raw content
-        clf_url = 'https://raw.githubusercontent.com/zli12321/qa_metrics/master/qa_metrics/classifier/lr_classifier.pkl'
-        vectorizer_url = 'https://raw.githubusercontent.com/zli12321/qa_metrics/master/qa_metrics/classifier/tf-idf_vectorizer.pkl'
-
-        if not os.path.exists(model_dir):
-            os.makedirs(model_dir)
-
-        try:
-            clf_updated = vectorizer_updated = False
-
-            if os.path.exists(model_path) and os.path.exists(vectorizer_path):
-                # Fetch headers to check last modified times without downloading the whole file
-                clf_response = requests.head(clf_url)
-                vectorizer_response = requests.head(vectorizer_url)
-
-                clf_last_modified = clf_response.headers.get('Last-Modified')
-                vectorizer_last_modified = vectorizer_response.headers.get('Last-Modified')
-
-                if clf_last_modified and vectorizer_last_modified:
-                    clf_local_modified = os.path.getmtime(model_path)
-                    vectorizer_local_modified = os.path.getmtime(vectorizer_path)
-
-                    clf_last_modified_dt = requests.utils.parsedate_to_datetime(clf_last_modified)
-                    vectorizer_last_modified_dt = requests.utils.parsedate_to_datetime(vectorizer_last_modified)
-
-                    # Compare remote file's last modified time with local file's last modified time
-                    if clf_last_modified_dt.timestamp() > clf_local_modified:
-                        clf_updated = True
-
-                    if vectorizer_last_modified_dt.timestamp() > vectorizer_local_modified:
-                        vectorizer_updated = True
-
-            # Download updated models if necessary
-            if clf_updated or not os.path.exists(model_path):
-                print('Downloading updated PANDA model...')
-                download_link(model_path, clf_url, 'PANDA model')
-
-            if vectorizer_updated or not os.path.exists(vectorizer_path):
-                print('Downloading updated PANDA evaluation model tokenizer...')
-                download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer')
-
-        except requests.ConnectionError:
-            print("No internet connection. Using existing models.")
-        except requests.HTTPError as http_err:
-            print(f"HTTP error occurred: {http_err}")
-        except Exception as err:
-            print(f"An unexpected error occurred: {err}")
+    def __init__(self): 
+        current_dir = os.path.dirname(__file__) 
+        model_dir = os.path.join(current_dir, 'classifier') 
+        model_path = os.path.join(model_dir, 'lr_classifier.pkl') 
+        vectorizer_path = os.path.join(model_dir, 'tf-idf_vectorizer.pkl') 
+        if not os.path.exists(model_path) or file_needs_update(clf_url, model_path) == True: 
+            if not os.path.exists(model_dir): 
+                os.makedirs(model_dir)
+                
+            clf_url = 'https://github.com/zli12321/qa\_metrics/raw/master/qa\_metrics/classifier/lr\_classifier' 
+            vectorizer_url = 'https://github.com/zli12321/qa\_metrics/raw/master/qa\_metrics/classifier/tf-idf\_vectorizer' 
+            print('Downloaded model path: ', model_path) 
+            download_link(model_path, clf_url, 'PANDA model') 
+            download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer') 
+        
 
         self.model = joblib.load(model_path)
         self.tokenizer = joblib.load(vectorizer_path)
-
 
     def download_latest_model(self):
-        current_dir = os.path.dirname(__file__)
-        model_dir = os.path.join(current_dir, 'classifier')
-        model_path = os.path.join(model_dir, 'lr_classifier.pkl')
-        vectorizer_path = os.path.join(model_dir, 'tf-idf_vectorizer.pkl')
+        current_dir = os.path.dirname(__file__) 
+        model_dir = os.path.join(current_dir, 'classifier') 
+        model_path = os.path.join(model_dir, 'lr_classifier.pkl') 
+        vectorizer_path = os.path.join(model_dir, 'tf-idf_vectorizer.pkl') 
 
-        # Corrected URLs to point directly to the raw content
-        clf_url = 'https://raw.githubusercontent.com/zli12321/qa_metrics/master/qa_metrics/classifier/lr_classifier.pkl'
-        vectorizer_url = 'https://raw.githubusercontent.com/zli12321/qa_metrics/master/qa_metrics/classifier/tf-idf_vectorizer.pkl'
-
-        print('Downloading updated PANDA model...')
-        download_link(model_path, clf_url, 'PANDA model')
-
-        print('Downloading updated PANDA evaluation model tokenizer...')
-        download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer')
-
-        self.model = joblib.load(model_path)
-        self.tokenizer = joblib.load(vectorizer_path)
+        if not os.path.exists(model_path): 
+            if not os.path.exists(model_dir): 
+                os.makedirs(model_dir) 
+                clf_url = 'https://github.com/zli12321/qa\_metrics/raw/master/qa\_metrics/classifier/lr\_classifier' 
+                vectorizer_url = 'https://github.com/zli12321/qa\_metrics/raw/master/qa\_metrics/classifier/tf-idf\_vectorizer' 
+                print('Downloaded model path: ', model_path) 
+                download_link(model_path, clf_url, 'PANDA model') 
+                download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer') 
+                self.model = joblib.load(model_path) 
+                self.tokenizer = joblib.load(vectorizer_path)
 
     '''
     Return the confidence score between the reference and candidate answers. 
