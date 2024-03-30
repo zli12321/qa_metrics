@@ -4,6 +4,7 @@ import joblib
 from scipy.sparse import hstack
 import numpy as np
 import os
+import requests
 
 
 class PEDANT:
@@ -12,15 +13,44 @@ class PEDANT:
         model_dir = os.path.join(current_dir, 'classifier')
         model_path = os.path.join(model_dir, 'lr_classifier.pkl')
         vectorizer_path = os.path.join(model_dir, 'tf-idf_vectorizer.pkl')
-        if not os.path.exists(model_path):
-            if not os.path.exists(model_dir):
-                os.makedirs(model_dir)
-            clf_url = 'https://github.com/zli12321/qa_metrics/raw/master/qa_metrics/classifier/lr_classifier'
-            vectorizer_url = 'https://github.com/zli12321/qa_metrics/raw/master/qa_metrics/classifier/tf-idf_vectorizer'
-            print('Downloaded model path: ', model_path)
-            download_link(model_path, clf_url, 'PANDA model')
-            download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer')
 
+        clf_url = 'https://github.com/zli12321/qa_metrics/raw/master/qa_metrics/classifier/lr_classifier'
+        vectorizer_url = 'https://github.com/zli12321/qa_metrics/raw/master/qa_metrics/classifier/tf-idf_vectorizer'
+
+        if not os.path.exists(model_dir):
+            os.makedirs(model_dir)
+
+        if os.path.exists(model_path) and os.path.exists(vectorizer_path):
+            try:
+                # Check if the remote model and vectorizer files have been updated
+                clf_response = requests.head(clf_url)
+                vectorizer_response = requests.head(vectorizer_url)
+
+                clf_last_modified = clf_response.headers.get('Last-Modified')
+                vectorizer_last_modified = vectorizer_response.headers.get('Last-Modified')
+
+                clf_local_modified = os.path.getmtime(model_path)
+                vectorizer_local_modified = os.path.getmtime(vectorizer_path)
+
+                if clf_last_modified and vectorizer_last_modified:
+                    clf_last_modified = requests.utils.parsedate_to_datetime(clf_last_modified).timestamp()
+                    vectorizer_last_modified = requests.utils.parsedate_to_datetime(vectorizer_last_modified).timestamp()
+
+                    if clf_last_modified > clf_local_modified:
+                        download_link(model_path, clf_url, 'PANDA model')
+                    if vectorizer_last_modified > vectorizer_local_modified:
+                        download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer')
+
+            except requests.ConnectionError:
+                print("No internet connection. Using existing model.")
+
+        else:
+            try:
+                print('Downloaded model path: ', model_path)
+                download_link(model_path, clf_url, 'PANDA model')
+                download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer')
+            except requests.ConnectionError:
+                raise Exception("No internet connection and model files not found.")
 
         self.model = joblib.load(model_path)
         self.tokenizer = joblib.load(vectorizer_path)
