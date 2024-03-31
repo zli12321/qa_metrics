@@ -38,7 +38,7 @@ def remove_punctuation(text):
     return remove_tab(stop_words(remove_punc(text)))
 
 def download_link(file, url, name):
-    if not os.path.isfile(file):
+    if True:
         # print("Downloading {}...".format(name))
         response = requests.get(url, stream=True)
 
