@@ -74,6 +74,73 @@ class TransformerMatcher:
             self.model = RobertaForSequenceClassification.from_pretrained(model_path, cache_dir=model_dir).to(self.device)
             self.tokenizer = RobertaTokenizer.from_pretrained(model_path, cache_dir=model_dir)
 
+    def download_latest_model(self, model='roberta'):
+        current_dir = os.path.dirname(__file__)
+        model_file = "model.safetensors"
+
+        if model == 'bert':
+            from transformers import BertForSequenceClassification, BertTokenizer, BertConfig
+            model_dir = os.path.join(current_dir, 'transformer_models/bert')
+            
+            # Ensure the target directory exists
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
+            
+            model_path = 'Zongxia/answer_equivalence_bert'
+            config= BertConfig.from_pretrained(model_path)
+            self.model = BertForSequenceClassification.from_pretrained(model_path, config=config, cache_dir=model_dir, model_file=model_file).to(self.device)
+            self.tokenizer = BertTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+        if model == 'distilbert':
+            from transformers import DistilBertForSequenceClassification, DistilBertConfig, DistilBertTokenizer
+            model_dir = os.path.join(current_dir, 'transformer_models/distilbert')
+
+            # Ensure the target directory exists
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
+            
+            model_path = 'Zongxia/answer_equivalence_distilbert'
+
+            self.tokenizer = DistilBertTokenizer.from_pretrained(model_path)
+            config = DistilBertConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            self.model = DistilBertForSequenceClassification.from_pretrained(model_path, config=config, model_file=model_file).to(self.device)
+        elif model == 'distilroberta':
+            from transformers import RobertaForSequenceClassification, RobertaTokenizer, RobertaConfig
+            model_dir = os.path.join(current_dir, 'transformer_models/distilroberta')
+            
+            # Ensure the target directory exists
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
+
+            model_path = 'Zongxia/answer_equivalence_distilroberta'
+
+            config = RobertaConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            self.model = RobertaForSequenceClassification.from_pretrained(model_path, cache_dir=model_dir, model_file=model_file).to(self.device)
+            self.tokenizer = RobertaTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+        elif model == 'roberta':
+            from transformers import RobertaForSequenceClassification, RobertaTokenizer, RobertaConfig
+            model_dir = os.path.join(current_dir, 'transformer_models/roberta')
+            
+            # Ensure the target directory exists
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
+
+            model_path = 'Zongxia/answer_equivalence_roberta'
+            config = RobertaConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            self.model = RobertaForSequenceClassification.from_pretrained(model_path, cache_dir=model_dir, model_file=model_file).to(self.device)
+            self.tokenizer = RobertaTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+        elif model == 'roberta-large':
+            from transformers import RobertaForSequenceClassification, RobertaTokenizer, RobertaConfig
+            model_dir = os.path.join(current_dir, 'transformer_models/roberta-large')
+            
+            # Ensure the target directory exists
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
+
+            model_path = 'Zongxia/answer_equivalence_roberta-large'
+            config = RobertaConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            self.model = RobertaForSequenceClassification.from_pretrained(model_path, cache_dir=model_dir, model_file=model_file).to(self.device)
+            self.tokenizer = RobertaTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+
     '''
     Return the confidence score between the reference and candidate answers. 
     reference, candidate, and question are strings.

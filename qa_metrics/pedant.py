@@ -20,10 +20,12 @@ class PEDANT:
         if True:
             if not os.path.exists(model_dir): 
                 os.makedirs(model_dir)
-                
-            # print('Downloaded model path: ', model_path) 
-            download_link(model_path, clf_url, 'PANDA model') 
-            download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer') 
+            try:
+                # print('Downloaded model path: ', model_path) 
+                download_link(model_path, clf_url, 'PANDA model') 
+                download_link(vectorizer_path, vectorizer_url, 'PANDA evaluation model tokenizer') 
+            except:
+                pass
         
 
         self.model = joblib.load(model_path)

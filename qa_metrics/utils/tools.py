@@ -2,6 +2,7 @@ import string
 import contractions
 import requests
 import os
+import regex
 from datetime import datetime
 
 def normalize_answer(text, lower=True):
@@ -22,6 +23,19 @@ def normalize_answer(text, lower=True):
         translator = str.maketrans('', '', string.punctuation)
         text = text.translate(translator)
         return contractions.fix(' '.join(text.split()))
+
+def remove_punctuation(text):
+    def stop_words(text):
+        return regex.sub(r'\b(a|an|the|is|are|am|was|were|be|being|been|will|would|to|of|for|by)\b', ' ', text)
+
+    def remove_punc(text):
+        exclude = set(string.punctuation)
+        return ''.join(ch for ch in text if ch not in exclude)
+
+    def remove_tab(text):
+        return ' '.join(text.split())
+
+    return remove_tab(stop_words(remove_punc(text)))
 
 def download_link(file, url, name):
     if not os.path.isfile(file):
