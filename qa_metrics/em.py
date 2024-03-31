@@ -7,10 +7,10 @@ def em_match(reference, candidate):
         candidate = [remove_punctuation(normalize_answer(str(ele))) for ele in candidate]
     elif isinstance(reference, list):
         reference = [remove_punctuation(normalize_answer(str(ele))) for ele in reference]
-        candidate = remove_punctuation(normalize_answer(str(candidate)))
+        candidate = [remove_punctuation(normalize_answer(str(candidate)))]
     elif isinstance(candidate, list):
         candidate = [remove_punctuation(normalize_answer(str(ele))) for ele in candidate]
-        reference = remove_punctuation(normalize_answer(str(reference)))
+        reference = [remove_punctuation(normalize_answer(str(reference)))]
     else:
         '''
         Normalize the strings
