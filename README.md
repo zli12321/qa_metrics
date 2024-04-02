@@ -12,7 +12,8 @@ QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating qu
 
 
 ## Installation
-
+* Python version >= 3.6
+* openai version >= 1.0
 To install the package, run the following command:
 
 ```bash
