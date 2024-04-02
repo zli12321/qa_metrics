@@ -3,9 +3,10 @@
 [![PyPI version qa-metrics](https://img.shields.io/pypi/v/qa-metrics.svg)](https://pypi.org/project/qa-metrics/) 
 [![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/17b7vrZqH0Yun2AJaOXydYZxr3cw20Ga6?usp=sharing)
 
-QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating question-answering models and prompting of black-box large language models. It provides various basic metrics to assess the performance of QA models. Check out our paper [**PANDA**](https://arxiv.org/abs/2402.11161), an efficient QA evaluation that retains competitive evaluation performance of transformer LLM models. 
+QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating question-answering models and prompting of black-box and open-source large language models. It provides various basic metrics to assess the performance of QA models. Check out our paper [**PANDA**](https://arxiv.org/abs/2402.11161), an efficient QA evaluation that retains competitive evaluation performance of transformer LLM models. 
 
-- 🔥 Our package also supports prompting of OPENAI GPT-series models and Claude Series models now.
+- 🔥 Our package also supports prompting OPENAI GPT-series models and Claude Series models now. (Assuimg OPENAI version > 1.0)
+- 🔥 Our package supports prompting various open source models such as LLaMA-2-70B-chat, LLaVA-1.5 etc by calling API from [deepinfra](https://deepinfra.com/models).
 
 
 ## Installation
@@ -26,10 +27,11 @@ Note: The prompting function can be used for any prompting purposes.
 
 ###### OpenAI
 ```python
-from qa_metrics.prompt_llm import *
-set_openai_api_key(YOUR_OPENAI_KEY)
+from qa_metrics.prompt_llm import CloseLLM
+model = CloseLLM()
+model.set_openai_api_key(YOUR_OPENAI_KEY)
 prompt = 'question: What is the Capital of France?\nreference: Paris\ncandidate: The capital is Paris\nIs the candidate answer correct based on the question and reference answer? Please only output correct or incorrect.'
-prompt_gpt(prompt=prompt, model_engine='gpt-3.5-turbo', temperature=0.1, max_token=10)
+model.prompt_gpt(prompt=prompt, model_engine='gpt-3.5-turbo', temperature=0.1, max_tokens=10)
 
 '''
 'correct'
@@ -38,14 +40,26 @@ prompt_gpt(prompt=prompt, model_engine='gpt-3.5-turbo', temperature=0.1, max_tok
 
 ###### Anthropic
 ```python
-set_anthropic_api_key(YOUR_OPENAI_KEY)
-prompt_claude(prompt=prompt, model_engine='claude-v1', anthropic_version="2023-06-01", max_tokens_to_sample=100, temperature=0.7)
+model = CloseLLM()
+model.set_anthropic_api_key(YOUR_Anthropic_KEY)
+model.prompt_claude(prompt=prompt, model_engine='claude-v1', anthropic_version="2023-06-01", max_tokens_to_sample=100, temperature=0.7)
 
 '''
 'correct'
 '''
 ```
 
+###### deepinfra (See below for descriptions of more models)
+```python
+from qa_metrics.prompt_open_llm import OpenLLM
+model = OpenLLM()
+model.set_deepinfra_api_key(YOUR_OPENAI_KEY)
+model.prompt(prompt=prompt, model_engine='mistralai/Mixtral-8x7B-Instruct-v0.1', temperature=0.1, max_tokens=10)
+
+'''
+'correct'
+'''
+```
 
 #### Exact Match
 ```python
@@ -135,6 +149,8 @@ If you find this repo avialable, please cite:
 - Our Training Dataset is adapted and augmented from [Bulian et al](https://github.com/google-research-datasets/answer-equivalence-dataset). Our [dataset repo](https://github.com/zli12321/Answer_Equivalence_Dataset.git) includes the augmented training set and QA evaluation testing sets discussed in our paper.
 - Now our model supports [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), a smaller and faster matching model than Bert!
 - Now our model supports [roberta](https://huggingface.co/Zongxia/answer_equivalence_roberta), [roberta-large](https://huggingface.co/Zongxia/answer_equivalence_roberta-large), a larger and more robust matching model than Bert!
+- Check avilability of open-source LLMs in [deepinfra](https://deepinfra.com/models)
+- deepinfra supports: "lizpreciatior/lzlv_70b_fp16_hf", "meta-llama/Llama-2-70b-chat-hf", "meta-llama/Llama-2-7b-chat-hf", "meta-llama/Llama-2-13b-chat-hf", "01-ai/Yi-34B-Chat", "google/gemma-7b-it", "llava-hf/llava-1.5-7b-hf", "mistralai/Mixtral-8x7B-Instruct-v0.1"
 
 ## License
 
