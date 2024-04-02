@@ -5,8 +5,10 @@
 
 QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating question-answering models and prompting of black-box and open-source large language models. It provides various basic metrics to assess the performance of QA models. Check out our paper [**PANDA**](https://arxiv.org/abs/2402.11161), an efficient QA evaluation that retains competitive evaluation performance of transformer LLM models. 
 
-- 🔥 Our package also supports prompting OPENAI GPT-series models and Claude Series models now. (Assuimg OPENAI version > 1.0)
-- 🔥 Our package supports prompting various open source models such as LLaMA-2-70B-chat, LLaVA-1.5 etc by calling API from [deepinfra](https://deepinfra.com/models).
+### Updates
+- Uopdated to version 0.2.7 
+  - Supports prompting OPENAI GPT-series models and Claude Series models now. (Assuimg OPENAI version > 1.0)
+  - Supports prompting various open source models such as LLaMA-2-70B-chat, LLaVA-1.5 etc by calling API from [deepinfra](https://deepinfra.com/models).
 
 
 ## Installation
