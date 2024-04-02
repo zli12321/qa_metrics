@@ -58,8 +58,8 @@ model.prompt_claude(prompt=prompt, model_engine='claude-v1', anthropic_version="
 ```python
 from qa_metrics.prompt_open_llm import OpenLLM
 model = OpenLLM()
-model.set_deepinfra_api_key(YOUR_OPENAI_KEY)
-model.prompt(prompt=prompt, model_engine='mistralai/Mixtral-8x7B-Instruct-v0.1', temperature=0.1, max_tokens=10)
+model.set_deepinfra_key(YOUR_DEEPINFRA_KEY)
+model.prompt(message=prompt, model_engine='mistralai/Mixtral-8x7B-Instruct-v0.1', temperature=0.1, max_tokens=10)
 
 '''
 'correct'
