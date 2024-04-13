@@ -96,7 +96,7 @@ F1 Match:  False
 '''
 ```
 
-#### PANDA Match
+#### Efficient Question/Answer Type Evaluation
 ```python
 from qa_metrics.pedant import PEDANT
 
@@ -120,7 +120,7 @@ print(pedant.get_score(reference_answer[1], candidate_answer, question))
 '''
 ```
 
-#### Transformer Match
+#### Transformer Evaluation
 Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), [roberta](https://huggingface.co/Zongxia/answer_equivalence_roberta), and [roberta-large](https://huggingface.co/Zongxia/answer_equivalence_roberta-large) are also supported now! 🔥🔥🔥
 
 ```python
