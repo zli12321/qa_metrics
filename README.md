@@ -96,7 +96,7 @@ F1 Match:  False
 '''
 ```
 
-#### Efficient Question/Answer Type Evaluation
+#### Efficient and Robust Question/Answer Type Evaluation
 ```python
 from qa_metrics.pedant import PEDANT
 
