@@ -32,6 +32,19 @@ The python package currently provides six QA evaluation methods.
 - Black-box LLM evaluations are closest to human evaluations, and they are not cost-free.
 
 #### Normalized Exact Match
+### `em_match`
+
+Returns a boolean indicating whether there are any exact normalized matches between gold and candidate answers.
+
+**Parameters**
+
+- `reference_answer` (list of str): A list of gold (correct) answers to the question.
+- `candidate_answer` (str): The answer provided by a candidate that needs to be evaluated.
+
+**Returns**
+
+- `boolean`: A boolean True/False signifying matches between reference or candidate answers.
+
 ```python
 from qa_metrics.em import em_match
 
@@ -62,6 +75,49 @@ F1 Match:  False
 ```
 
 #### Efficient and Robust Question/Answer Type Evaluation
+### 1. `get_highest_score`
+
+Returns the gold answer and candidate answer pair that has the highest matching score. This function is useful for evaluating the closest match to a given candidate response based on a list of reference answers.
+
+**Parameters**
+
+- `reference_answer` (list of str): A list of gold (correct) answers to the question.
+- `candidate_answer` (str): The answer provided by a candidate that needs to be evaluated.
+- `question` (str): The question for which the answers are being evaluated.
+
+**Returns**
+
+- `dictionary`: A dictionary containing the gold answer and candidate answer that have the highest matching score.
+
+### 2. `get_scores`
+
+Returns all the gold answer and candidate answer pairs' matching scores.
+
+**Parameters**
+
+- `reference_answer` (list of str): A list of gold (correct) answers to the question.
+- `candidate_answer` (str): The answer provided by a candidate that needs to be evaluated.
+- `question` (str): The question for which the answers are being evaluated.
+
+**Returns**
+
+- `dictionary`: A dictionary containing gold answers and the candidate answer's matching score.
+
+### 3. `evaluate`
+
+Returns True if the candidate answer is a match of any of the gold answers.
+
+**Parameters**
+
+- `reference_answer` (list of str): A list of gold (correct) answers to the question.
+- `candidate_answer` (str): The answer provided by a candidate that needs to be evaluated.
+- `question` (str): The question for which the answers are being evaluated.
+
+**Returns**
+
+- `boolean`: A boolean True/False signifying matches between reference or candidate answers.
+
+
 ```python
 from qa_metrics.pedant import PEDANT
 
