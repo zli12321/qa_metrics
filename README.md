@@ -25,7 +25,7 @@ pip install qa-metrics
 ## Usage/Logistics
 
 The python package currently provides six QA evaluation methods. 
-- Given a set of gold answers, a candidate answer to be evaluated, and a question (if applicable to the evaluation method), the evaluation returns True if the candidate answer matches any one of the gold answer, False otherwise.
+- Given a set of gold answers, a candidate answer to be evaluated, and a question (if applicable), the evaluation returns True if the candidate answer matches any one of the gold answer, False otherwise.
 - Different evaluation methods have distinct strictness of evaluating the correctness of a candidate answer. Some have higher correlation with human judgments than others.
 - Normalized Exact Match is the most efficient method. It is suitable for short-form QA datasets such as NQ-OPEN, Hotpot QA, TriviaQA, SQuAD, etc.
 - Question/Answer Type Evaluation and Transformer Neural evaluations are cost free and suitable for short-form and longer-form QA datasets. They have higher correlation with human judgments than exact match and F1 score when the length of the gold and candidate answers become long.
