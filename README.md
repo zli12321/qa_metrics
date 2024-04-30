@@ -102,7 +102,7 @@ Returns the gold answer and candidate answer pair that has the highest matching 
 
 - `dictionary`: A dictionary containing the gold answer and candidate answer that have the highest matching score.
 
-### 2. `get_scores`
+#### 2. `get_scores`
 
 Returns all the gold answer and candidate answer pairs' matching scores.
 
@@ -116,7 +116,7 @@ Returns all the gold answer and candidate answer pairs' matching scores.
 
 - `dictionary`: A dictionary containing gold answers and the candidate answer's matching score.
 
-### 3. `evaluate`
+#### 3. `evaluate`
 
 Returns True if the candidate answer is a match of any of the gold answers.
 
