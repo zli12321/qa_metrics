@@ -22,51 +22,16 @@ To install the package, run the following command:
 pip install qa-metrics
 ```
 
-## Usage
+## Usage/Logistics
 
-The python package currently provides six QA evaluation methods.
+The python package currently provides six QA evaluation methods. 
+- Given a set of gold answers, a candidate answer to be evaluated, and a question (if applicable to the evaluation method), the evaluation returns True if the candidate answer matches any one of the gold answer, False otherwise.
+- Different evaluation methods have distinct strictness of evaluating the correctness of a candidate answer. Some have higher correlation with human judgments than others.
+- Normalized Exact Match is the most efficient method. It is suitable for short-form QA datasets such as NQ-OPEN, Hotpot QA, TriviaQA, SQuAD, etc.
+- Question/Answer Type Evaluation and Transformer Neural evaluations are cost free and suitable for short-form and longer-form QA datasets. They have higher correlation with human judgments than exact match and F1 score when the length of the gold and candidate answers become long.
+- Black-box LLM evaluations are closest to human evaluations, and they are not cost-free.
 
-#### Prompting LLM For Evaluation
-
-Note: The prompting function can be used for any prompting purposes.
-
-###### OpenAI
-```python
-from qa_metrics.prompt_llm import CloseLLM
-model = CloseLLM()
-model.set_openai_api_key(YOUR_OPENAI_KEY)
-prompt = 'question: What is the Capital of France?\nreference: Paris\ncandidate: The capital is Paris\nIs the candidate answer correct based on the question and reference answer? Please only output correct or incorrect.'
-model.prompt_gpt(prompt=prompt, model_engine='gpt-3.5-turbo', temperature=0.1, max_tokens=10)
-
-'''
-'correct'
-'''
-```
-
-###### Anthropic
-```python
-model = CloseLLM()
-model.set_anthropic_api_key(YOUR_Anthropic_KEY)
-model.prompt_claude(prompt=prompt, model_engine='claude-v1', anthropic_version="2023-06-01", max_tokens_to_sample=100, temperature=0.7)
-
-'''
-'correct'
-'''
-```
-
-###### deepinfra (See below for descriptions of more models)
-```python
-from qa_metrics.prompt_open_llm import OpenLLM
-model = OpenLLM()
-model.set_deepinfra_key(YOUR_DEEPINFRA_KEY)
-model.prompt(message=prompt, model_engine='mistralai/Mixtral-8x7B-Instruct-v0.1', temperature=0.1, max_tokens=10)
-
-'''
-'correct'
-'''
-```
-
-#### Exact Match
+#### Normalized Exact Match
 ```python
 from qa_metrics.em import em_match
 
@@ -120,7 +85,7 @@ print(pedant.get_score(reference_answer[1], candidate_answer, question))
 '''
 ```
 
-#### Transformer Evaluation
+#### Transformer Neural Evaluation
 Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), [roberta](https://huggingface.co/Zongxia/answer_equivalence_roberta), and [roberta-large](https://huggingface.co/Zongxia/answer_equivalence_roberta-large) are also supported now! 🔥🔥🔥
 
 ```python
@@ -133,6 +98,46 @@ match_result = tm.transformer_match(reference_answer, candidate_answer, question
 print("Score: %s; bert Match: %s" % (scores, match_result))
 '''
 Score: {'The Frog Prince': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.6934309}, 'The Princess and the Frog': {'The movie "The Princess and the Frog" is loosely based off the Brother Grimm\'s "Iron Henry"': 0.7400551}}; TM Match: True
+'''
+```
+
+#### Prompting LLM For Evaluation
+
+Note: The prompting function can be used for any prompting purposes.
+
+###### OpenAI
+```python
+from qa_metrics.prompt_llm import CloseLLM
+model = CloseLLM()
+model.set_openai_api_key(YOUR_OPENAI_KEY)
+prompt = 'question: What is the Capital of France?\nreference: Paris\ncandidate: The capital is Paris\nIs the candidate answer correct based on the question and reference answer? Please only output correct or incorrect.'
+model.prompt_gpt(prompt=prompt, model_engine='gpt-3.5-turbo', temperature=0.1, max_tokens=10)
+
+'''
+'correct'
+'''
+```
+
+###### Anthropic
+```python
+model = CloseLLM()
+model.set_anthropic_api_key(YOUR_Anthropic_KEY)
+model.prompt_claude(prompt=prompt, model_engine='claude-v1', anthropic_version="2023-06-01", max_tokens_to_sample=100, temperature=0.7)
+
+'''
+'correct'
+'''
+```
+
+###### deepinfra (See below for descriptions of more models)
+```python
+from qa_metrics.prompt_open_llm import OpenLLM
+model = OpenLLM()
+model.set_deepinfra_key(YOUR_DEEPINFRA_KEY)
+model.prompt(message=prompt, model_engine='mistralai/Mixtral-8x7B-Instruct-v0.1', temperature=0.1, max_tokens=10)
+
+'''
+'correct'
 '''
 ```
 
