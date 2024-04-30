@@ -31,8 +31,8 @@ The python package currently provides six QA evaluation methods.
 - Question/Answer Type Evaluation and Transformer Neural evaluations are cost free and suitable for short-form and longer-form QA datasets. They have higher correlation with human judgments than exact match and F1 score when the length of the gold and candidate answers become long.
 - Black-box LLM evaluations are closest to human evaluations, and they are not cost-free.
 
-#### Normalized Exact Match
-### `em_match`
+### Normalized Exact Match
+#### `em_match`
 
 Returns a boolean indicating whether there are any exact normalized matches between gold and candidate answers.
 
@@ -57,8 +57,8 @@ Exact Match:  False
 '''
 ```
 
-#### F1 Score
-### `f1_score_with_precision_recall`
+### F1 Score
+#### `f1_score_with_precision_recall`
 
 Calculates F1 score, precision, and recall between a reference and a candidate answer.
 
@@ -87,8 +87,8 @@ F1 Match:  False
 '''
 ```
 
-#### Efficient and Robust Question/Answer Type Evaluation
-### 1. `get_highest_score`
+### Efficient and Robust Question/Answer Type Evaluation
+#### 1. `get_highest_score`
 
 Returns the gold answer and candidate answer pair that has the highest matching score. This function is useful for evaluating the closest match to a given candidate response based on a list of reference answers.
 
@@ -154,10 +154,10 @@ print(pedant.get_score(reference_answer[1], candidate_answer, question))
 '''
 ```
 
-#### Transformer Neural Evaluation
+### Transformer Neural Evaluation
 Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), [roberta](https://huggingface.co/Zongxia/answer_equivalence_roberta), and [roberta-large](https://huggingface.co/Zongxia/answer_equivalence_roberta-large) are also supported now! 🔥🔥🔥
 
-### `transformer_match`
+#### `transformer_match`
 
 Returns True if the candidate answer is a match of any of the gold answers.
 
