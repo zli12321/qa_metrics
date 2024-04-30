@@ -58,6 +58,19 @@ Exact Match:  False
 ```
 
 #### F1 Score
+### `f1_score_with_precision_recall`
+
+Calculates F1 score, precision, and recall between a reference and a candidate answer.
+
+**Parameters**
+
+- `reference_answer` (str): A gold (correct) answers to the question.
+- `candidate_answer` (str): The answer provided by a candidate that needs to be evaluated.
+
+**Returns**
+
+- `dictionary`: A dictionary containing the F1 score, precision, and recall between a gold and candidate answer.
+
 ```python
 from qa_metrics.f1 import f1_match,f1_score_with_precision_recall
 
@@ -143,6 +156,20 @@ print(pedant.get_score(reference_answer[1], candidate_answer, question))
 
 #### Transformer Neural Evaluation
 Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), [roberta](https://huggingface.co/Zongxia/answer_equivalence_roberta), and [roberta-large](https://huggingface.co/Zongxia/answer_equivalence_roberta-large) are also supported now! 🔥🔥🔥
+
+### `transformer_match`
+
+Returns True if the candidate answer is a match of any of the gold answers.
+
+**Parameters**
+
+- `reference_answer` (list of str): A list of gold (correct) answers to the question.
+- `candidate_answer` (str): The answer provided by a candidate that needs to be evaluated.
+- `question` (str): The question for which the answers are being evaluated.
+
+**Returns**
+
+- `boolean`: A boolean True/False signifying matches between reference or candidate answers.
 
 ```python
 from qa_metrics.transformerMatcher import TransformerMatcher
