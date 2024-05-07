@@ -9,6 +9,7 @@ QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating qu
 - Uopdated to version 0.2.8 
   - Supports prompting OPENAI GPT-series models and Claude Series models now. (Assuimg OPENAI version > 1.0)
   - Supports prompting various open source models such as LLaMA-2-70B-chat, LLaVA-1.5 etc by calling API from [deepinfra](https://deepinfra.com/models).
+  - Added trained tiny-bert for QA evaluation. Model size is 18 MB.
 
 
 ## Installation
@@ -155,7 +156,7 @@ print(pedant.get_score(reference_answer[1], candidate_answer, question))
 ```
 
 ## Transformer Neural Evaluation
-Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), [roberta](https://huggingface.co/Zongxia/answer_equivalence_roberta), and [roberta-large](https://huggingface.co/Zongxia/answer_equivalence_roberta-large) are also supported now! 🔥🔥🔥
+Our fine-tuned BERT model is on 🤗 [Huggingface](https://huggingface.co/Zongxia/answer_equivalence_bert?text=The+goal+of+life+is+%5BMASK%5D.). Our Package also supports downloading and matching directly. [distilroberta](https://huggingface.co/Zongxia/answer_equivalence_distilroberta), [distilbert](https://huggingface.co/Zongxia/answer_equivalence_distilbert), [roberta](https://huggingface.co/Zongxia/answer_equivalence_roberta), [tiny-bert](https://huggingface.co/Zongxia/answer_equivalence_tiny_bert), and [roberta-large](https://huggingface.co/Zongxia/answer_equivalence_roberta-large) are also supported now! 🔥🔥🔥
 
 #### `transformer_match`
 
@@ -175,7 +176,7 @@ Returns True if the candidate answer is a match of any of the gold answers.
 from qa_metrics.transformerMatcher import TransformerMatcher
 
 question = "Which movie is loosley based off the Brother Grimm's Iron Henry?"
-# Supported models: roberta-large, roberta, bert, distilbert, distilroberta
+# Supported models: roberta-large, tiny-bert, roberta, bert, distilbert, distilroberta
 tm = TransformerMatcher("roberta-large")
 scores = tm.get_scores(reference_answer, candidate_answer, question)
 match_result = tm.transformer_match(reference_answer, candidate_answer, question)
