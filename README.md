@@ -32,6 +32,20 @@ The python package currently provides six QA evaluation methods.
 - Question/Answer Type Evaluation and Transformer Neural evaluations are cost free and suitable for short-form and longer-form QA datasets. They have higher correlation with human judgments than exact match and F1 score when the length of the gold and candidate answers become long.
 - Black-box LLM evaluations are closest to human evaluations, and they are not cost-free.
 
+If you find this repo avialable, please cite:
+```bibtex
+@misc{li2024panda,
+      title={PANDA (Pedantic ANswer-correctness Determination and Adjudication):Improving Automatic Evaluation for Question Answering and Text Generation}, 
+      author={Zongxia Li and Ishani Mondal and Yijun Liang and Huy Nghiem and Jordan Lee Boyd-Graber},
+      year={2024},
+      eprint={2402.11161},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
+
+# Documentation
+
 ## Normalized Exact Match
 #### `em_match`
 
@@ -226,17 +240,6 @@ model.prompt(message=prompt, model_engine='mistralai/Mixtral-8x7B-Instruct-v0.1'
 '''
 ```
 
-If you find this repo avialable, please cite:
-```bibtex
-@misc{li2024panda,
-      title={PANDA (Pedantic ANswer-correctness Determination and Adjudication):Improving Automatic Evaluation for Question Answering and Text Generation}, 
-      author={Zongxia Li and Ishani Mondal and Yijun Liang and Huy Nghiem and Jordan Lee Boyd-Graber},
-      year={2024},
-      eprint={2402.11161},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
-}
-```
 
 ## Updates
 - Improved PANDA evaluation with more representative answer correctness training data.
