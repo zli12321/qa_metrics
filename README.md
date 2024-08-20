@@ -191,8 +191,8 @@ Returns True if the candidate answer is a match of any of the gold answers.
 from qa_metrics.transformerMatcher import TransformerMatcher
 
 question = "Which movie is loosley based off the Brother Grimm's Iron Henry?"
-# Supported models: roberta-large, tiny-bert, roberta, bert, distilbert, distilroberta
-tm = TransformerMatcher("roberta-large")
+# Supported models: zli12321/answer_equivalence_roberta-large, zli12321/answer_equivalence_tiny_bert, zli12321/answer_equivalence_roberta, zli12321/answer_equivalence_bert, zli12321/answer_equivalence_distilbert, zli12321/answer_equivalence_distilroberta
+tm = TransformerMatcher("zli12321/answer_equivalence_roberta-large")
 scores = tm.get_scores(reference_answer, candidate_answer, question)
 match_result = tm.transformer_match(reference_answer, candidate_answer, question)
 print("Score: %s; bert Match: %s" % (scores, match_result))
