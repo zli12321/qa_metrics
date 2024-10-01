@@ -35,13 +35,14 @@ The python package currently provides six QA evaluation methods.
 
 If you find this repo avialable, please cite:
 ```bibtex
-@misc{li2024panda,
-      title={PANDA (Pedantic ANswer-correctness Determination and Adjudication):Improving Automatic Evaluation for Question Answering and Text Generation}, 
+@misc{li2024pedantspreciseevaluationsdiverse,
+      title={PEDANTS: Cheap but Effective and Interpretable Answer Equivalence}, 
       author={Zongxia Li and Ishani Mondal and Yijun Liang and Huy Nghiem and Jordan Lee Boyd-Graber},
       year={2024},
       eprint={2402.11161},
       archivePrefix={arXiv},
-      primaryClass={cs.CL}
+      primaryClass={cs.CL},
+      url={https://arxiv.org/abs/2402.11161}, 
 }
 ```
 
