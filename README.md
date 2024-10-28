@@ -33,13 +33,22 @@ Our package offers six QA evaluation methods with varying strengths:
 | Method | Best For | Cost | Correlation with Human Judgment |
 |--------|----------|------|--------------------------------|
 | Normalized Exact Match | Short-form QA (NQ-OPEN, HotpotQA, etc.) | Free | Good |
-| PEDANTS | Both short & medium-form QA | Free | High |
+| PEDANTS | Both short & medium-form QA | Free | Very High |
 | Transformer Neural Evaluation | Both short & long-form QA | Free | High |
 | Black-box LLM Evaluation | All QA types | Paid | Highest |
 
 ## 📖 Documentation
 
 ### 1. Normalized Exact Match
+
+#### Method: `em_match`
+**Parameters**
+- `reference_answer` (list of str): A list of gold (correct) answers to the question
+- `candidate_answer` (str): The answer provided by a candidate that needs to be evaluated
+
+**Returns**
+- `boolean`: True if there are any exact normalized matches between gold and candidate answers
+
 ```python
 from qa_metrics.em import em_match
 
@@ -49,6 +58,24 @@ match_result = em_match(reference_answer, candidate_answer)
 ```
 
 ### 2. F1 Score
+
+#### Method: `f1_score_with_precision_recall`
+**Parameters**
+- `reference_answer` (str): A gold (correct) answer to the question
+- `candidate_answer` (str): The answer provided by a candidate that needs to be evaluated
+
+**Returns**
+- `dictionary`: Contains the F1 score, precision, and recall between a gold and candidate answer
+
+#### Method: `f1_match`
+**Parameters**
+- `reference_answer` (list of str): List of gold answers
+- `candidate_answer` (str): Candidate answer to evaluate
+- `threshold` (float): F1 score threshold for considering a match (default: 0.5)
+
+**Returns**
+- `boolean`: True if F1 score exceeds threshold for any gold answer
+
 ```python
 from qa_metrics.f1 import f1_match, f1_score_with_precision_recall
 
@@ -57,6 +84,51 @@ match_result = f1_match(reference_answer, candidate_answer, threshold=0.5)
 ```
 
 ### 3. PEDANTS
+
+#### Method: `get_highest_score`
+**Parameters**
+- `reference_answer` (list of str): List of gold answers
+- `candidate_answer` (str): Candidate answer to evaluate
+- `question` (str): The question being evaluated
+
+**Returns**
+- `dictionary`: Contains the gold answer and candidate answer pair with highest matching score
+
+#### Method: `get_scores`
+**Parameters**
+- `reference_answer` (list of str): List of gold answers
+- `candidate_answer` (str): Candidate answer to evaluate
+- `question` (str): The question being evaluated
+
+**Returns**
+- `dictionary`: Contains matching scores for all gold answer and candidate answer pairs
+
+#### Method: `evaluate`
+**Parameters**
+- `reference_answer` (list of str): List of gold answers
+- `candidate_answer` (str): Candidate answer to evaluate
+- `question` (str): The question being evaluated
+
+**Returns**
+- `boolean`: True if candidate answer matches any gold answer
+
+#### Method: `get_question_type`
+**Parameters**
+- `reference_answer` (list of str): List of gold answers
+- `question` (str): The question being evaluated
+
+**Returns**
+- `list`: The type of the question (what, who, when, how, why, which, where)
+
+#### Method: `get_judgement_type`
+**Parameters**
+- `reference_answer` (list of str): List of gold answers
+- `candidate_answer` (str): Candidate answer to evaluate
+- `question` (str): The question being evaluated
+
+**Returns**
+- `list`: A list revised rules applicable to judge answer correctness
+
 ```python
 from qa_metrics.pedant import PEDANT
 
@@ -66,6 +138,16 @@ match_result = pedant.evaluate(reference_answer, candidate_answer, question)
 ```
 
 ### 4. Transformer Neural Evaluation
+
+#### Method: `transformer_match`
+**Parameters**
+- `reference_answer` (list of str): List of gold answers
+- `candidate_answer` (str): Candidate answer to evaluate
+- `question` (str): The question being evaluated
+
+**Returns**
+- `boolean`: True if transformer model considers candidate answer equivalent to any gold answer
+
 ```python
 from qa_metrics.transformerMatcher import TransformerMatcher
 
@@ -75,7 +157,13 @@ match_result = tm.transformer_match(reference_answer, candidate_answer, question
 
 ### 5. LLM Integration
 
-#### OpenAI
+#### Method: `prompt_gpt`
+**Parameters**
+- `prompt` (str): The input prompt text
+- `model_engine` (str): OpenAI model to use (e.g., 'gpt-3.5-turbo')
+- `temperature` (float): Controls randomness (0-1)
+- `max_tokens` (int): Maximum tokens in response
+
 ```python
 from qa_metrics.prompt_llm import CloseLLM
 
@@ -84,14 +172,27 @@ model.set_openai_api_key(YOUR_OPENAI_KEY)
 result = model.prompt_gpt(prompt=prompt, model_engine='gpt-3.5-turbo')
 ```
 
-#### Anthropic
+#### Method: `prompt_claude`
+**Parameters**
+- `prompt` (str): The input prompt text
+- `model_engine` (str): Claude model to use
+- `anthropic_version` (str): API version
+- `max_tokens_to_sample` (int): Maximum tokens in response
+- `temperature` (float): Controls randomness (0-1)
+
 ```python
 model = CloseLLM()
 model.set_anthropic_api_key(YOUR_ANTHROPIC_KEY)
 result = model.prompt_claude(prompt=prompt, model_engine='claude-v1')
 ```
 
-#### Deepinfra
+#### Method: `prompt`
+**Parameters**
+- `message` (str): The input message text
+- `model_engine` (str): Model to use
+- `temperature` (float): Controls randomness (0-1)
+- `max_tokens` (int): Maximum tokens in response
+
 ```python
 from qa_metrics.prompt_open_llm import OpenLLM
 
