@@ -1,12 +1,14 @@
 # QA-Evaluation-Metrics
 
 [![PyPI version qa-metrics](https://img.shields.io/pypi/v/qa-metrics.svg)](https://pypi.org/project/qa-metrics/) 
-[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/17b7vrZqH0Yun2AJaOXydYZxr3cw20Ga6?usp=sharing)
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)]([https://colab.research.google.com/drive/17b7vrZqH0Yun2AJaOXydYZxr3cw20Ga6?usp=sharing](https://colab.research.google.com/drive/1Ke23KIeHFdPWad0BModmcWKZ6jSbF5nI?usp=sharing))
 
 QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating question-answering models and prompting of black-box and open-source large language models. It provides various basic and efficient metrics to assess the performance of QA models. 
 
 ### Updates
-- Uopdated to version 0.2.17
+- Uopdated to version 0.2.19
+  - Our paper is accepted to EMNLP 2024 Findings!
+  - Updates PEDANTS to multi pipeline, improves rubustness on edge cases.
   - Supports prompting OPENAI GPT-series models and Claude Series models now. (Assuimg OPENAI version > 1.0)
   - Supports prompting various open source models such as LLaMA-2-70B-chat, LLaVA-1.5 etc by calling API from [deepinfra](https://deepinfra.com/models).
   - Added trained tiny-bert for QA evaluation. Model size is 18 MB.
