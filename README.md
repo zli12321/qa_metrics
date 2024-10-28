@@ -106,7 +106,7 @@ F1 Match:  False
 '''
 ```
 
-## Efficient and Robust Question/Answer Type Evaluation
+## PEDANTS
 #### 1. `get_highest_score`
 
 Returns the gold answer and candidate answer pair that has the highest matching score. This function is useful for evaluating the closest match to a given candidate response based on a list of reference answers.
