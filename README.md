@@ -33,7 +33,7 @@ Our package offers six QA evaluation methods with varying strengths:
 | Method | Best For | Cost | Correlation with Human Judgment |
 |--------|----------|------|--------------------------------|
 | Normalized Exact Match | Short-form QA (NQ-OPEN, HotpotQA, etc.) | Free | Good |
-| Question/Answer Type Evaluation | Both short & long-form QA | Free | High |
+| PEDANTS | Both short & medium-form QA | Free | High |
 | Transformer Neural Evaluation | Both short & long-form QA | Free | High |
 | Black-box LLM Evaluation | All QA types | Paid | Highest |
 
