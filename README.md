@@ -1,7 +1,7 @@
 # QA-Evaluation-Metrics
 
 [![PyPI version qa-metrics](https://img.shields.io/pypi/v/qa-metrics.svg)](https://pypi.org/project/qa-metrics/) 
-[![Colab](https://colab.research.google.com/assets/colab-badge.svg)]([https://colab.research.google.com/drive/17b7vrZqH0Yun2AJaOXydYZxr3cw20Ga6?usp=sharing](https://colab.research.google.com/drive/1Ke23KIeHFdPWad0BModmcWKZ6jSbF5nI?usp=sharing))
+[![Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1Ke23KIeHFdPWad0BModmcWKZ6jSbF5nI?usp=sharing)
 
 QA-Evaluation-Metrics is a fast and lightweight Python package for evaluating question-answering models and prompting of black-box and open-source large language models. It provides various basic and efficient metrics to assess the performance of QA models. 
 
