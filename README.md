@@ -34,7 +34,7 @@ Our package offers six QA evaluation methods with varying strengths:
 |--------|----------|------|--------------------------------|
 | Normalized Exact Match | Short-form QA (NQ-OPEN, HotpotQA, etc.) | Free | Good |
 | PEDANTS | Both short & medium-form QA | Free | Very High |
-| Transformer Neural Evaluation | Both short & long-form QA | Free | High |
+| [Neural Evaluation](https://huggingface.co/zli12321/answer_equivalence_tiny_bert) | Both short & long-form QA | Free | High |
 | [Open Source LLM Evaluation](https://huggingface.co/zli12321/prometheus2-2B) | All QA types | Free | High |
 | Black-box LLM Evaluation | All QA types | Paid | Highest |
 
