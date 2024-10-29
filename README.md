@@ -151,7 +151,8 @@ match_result = pedant.evaluate(reference_answer, candidate_answer, question)
 ```python
 from qa_metrics.transformerMatcher import TransformerMatcher
 
-tm = TransformerMatcher("zli12321/answer_equivalence_roberta-large")
+### supports `zli12321/answer_equivalence_bert`, `zli12321/answer_equivalence_distilbert`, `zli12321/answer_equivalence_roberta`, `zli12321/answer_equivalence_distilroberta`
+tm = TransformerMatcher("zli12321/answer_equivalence_tiny_bert")
 match_result = tm.transformer_match(reference_answer, candidate_answer, question)
 ```
 
