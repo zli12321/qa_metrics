@@ -86,6 +86,15 @@ match_result = f1_match(reference_answer, candidate_answer, threshold=0.5)
 
 ### 3. PEDANTS
 
+#### Method: `get_score`
+**Parameters**
+- `reference_answer` (str): A Gold answer
+- `candidate_answer` (str): Candidate answer to evaluate
+- `question` (str): The question being evaluated
+
+**Returns**
+- `float`: The similarity score between two strings (0 to 1)
+
 #### Method: `get_highest_score`
 **Parameters**
 - `reference_answer` (list of str): List of gold answers
@@ -139,6 +148,33 @@ match_result = pedant.evaluate(reference_answer, candidate_answer, question)
 ```
 
 ### 4. Transformer Neural Evaluation
+
+#### Method: `get_score`
+**Parameters**
+- `reference_answer` (str): A Gold answer
+- `candidate_answer` (str): Candidate answer to evaluate
+- `question` (str): The question being evaluated
+
+**Returns**
+- `float`: The similarity score between two strings (0 to 1)
+
+#### Method: `get_highest_score`
+**Parameters**
+- `reference_answer` (list of str): List of gold answers
+- `candidate_answer` (str): Candidate answer to evaluate
+- `question` (str): The question being evaluated
+
+**Returns**
+- `dictionary`: Contains the gold answer and candidate answer pair with highest matching score
+
+#### Method: `get_scores`
+**Parameters**
+- `reference_answer` (list of str): List of gold answers
+- `candidate_answer` (str): Candidate answer to evaluate
+- `question` (str): The question being evaluated
+
+**Returns**
+- `dictionary`: Contains matching scores for all gold answer and candidate answer pairs
 
 #### Method: `transformer_match`
 **Parameters**
