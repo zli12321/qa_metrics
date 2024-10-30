@@ -5,6 +5,8 @@
 
 > A fast and lightweight Python package for evaluating question-answering models and prompting of black-box and open-source large language models.
 
+> `pip install qa-metrics` is all you need!
+
 ## 🎉 Latest Updates
 
 - **Version 0.2.19 Released!**
