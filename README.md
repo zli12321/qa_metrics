@@ -19,6 +19,13 @@
 
 ## 🚀 Quick Start
 
+## Table of Contents
+* 1. [Normalized Exact Match](#em)
+* 2. [Token F1 Score](#f1)
+* 3. [PEDANTS](#pedants)
+* 4. [Finetuned Neural Matching](#neural)
+* 5. [Prompting LLM](#llm)
+
 ### Prerequisites
 - Python >= 3.6
 - openai >= 1.0
@@ -39,15 +46,6 @@ Our package offers six QA evaluation methods with varying strengths:
 | [Neural Evaluation](https://huggingface.co/zli12321/answer_equivalence_tiny_bert) | Both short & long-form QA | Free | High |
 | [Open Source LLM Evaluation](https://huggingface.co/zli12321/prometheus2-2B) | All QA types | Free | High |
 | Black-box LLM Evaluation | All QA types | Paid | Highest |
-
-## Table of Contents
-* 1. [Normalized Exact Match](#em)
-* 2. [Token F1 Score](#f1)
-* 3. [PEDANTS](#pedants)
-* 4. [Finetuned Neural Matching](#neural)
-* 5. [Prompting LLM](#llm)
-
-
 
 
 
