@@ -40,9 +40,20 @@ Our package offers six QA evaluation methods with varying strengths:
 | [Open Source LLM Evaluation](https://huggingface.co/zli12321/prometheus2-2B) | All QA types | Free | High |
 | Black-box LLM Evaluation | All QA types | Paid | Highest |
 
+## Table of Contents
+* 1. [Normalized Exact Match](#em)
+* 2. [Token F1 Score](#f1)
+* 3. [PEDANTS](#pedants)
+* 4. [Finetuned Neural Matching](#neural)
+* 5. [Prompting LLM](#llm)
+
+
+
+
+
 ## 📖 Documentation
 
-### 1. Normalized Exact Match
+### 1. <a name='em'></a>Normalized Exact Match
 
 #### Method: `em_match`
 **Parameters**
@@ -60,7 +71,7 @@ candidate_answer = "The movie \"The Princess and the Frog\" is loosely based off
 match_result = em_match(reference_answer, candidate_answer)
 ```
 
-### 2. F1 Score
+### 2. <a name='f1'></a>F1 Score
 
 #### Method: `f1_score_with_precision_recall`
 **Parameters**
@@ -86,7 +97,7 @@ f1_stats = f1_score_with_precision_recall(reference_answer[0], candidate_answer)
 match_result = f1_match(reference_answer, candidate_answer, threshold=0.5)
 ```
 
-### 3. PEDANTS
+### 3. <a name='pedants'></a>PEDANTS
 
 #### Method: `get_score`
 **Parameters**
@@ -149,7 +160,7 @@ scores = pedant.get_scores(reference_answer, candidate_answer, question)
 match_result = pedant.evaluate(reference_answer, candidate_answer, question)
 ```
 
-### 4. Transformer Neural Evaluation
+### 4. <a name='neural'></a>Transformer Neural Evaluation
 
 #### Method: `get_score`
 **Parameters**
@@ -195,7 +206,7 @@ tm = TransformerMatcher("zli12321/answer_equivalence_tiny_bert")
 match_result = tm.transformer_match(reference_answer, candidate_answer, question)
 ```
 
-### 5. LLM Integration
+### 5. <a name='llm'></a>LLM Integration
 
 #### Method: `prompt_gpt`
 **Parameters**
