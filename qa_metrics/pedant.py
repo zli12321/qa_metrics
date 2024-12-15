@@ -66,13 +66,13 @@ class PEDANT:
         self.type_model = joblib.load(type_clf_path)
 
     def get_rule_features(self, data):
-        inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(ele['question']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['reference']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['candidate']))) + ' [SEP]' for ele in data]
+        inputs = ['[CLS] ' + str(ele['question']) + ' [SEP] ' + str(ele['reference']) + ' [SEP] ' + str(ele['candidate']) + ' [SEP]' for ele in data]
         f1, p, r = self.get_f1_features(data)
         inputs = self.tokenizer.transform(inputs)
         return self.rule_model.predict_proba(hstack([inputs, f1, p, r])), self.rule_model.predict_log_proba(hstack([inputs, f1, p, r]))
 
     def get_type_features(self, data):
-        inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(ele['question']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['reference']))) + ' [SEP]' for ele in data]
+        inputs = ['[CLS] ' + str(ele['question']) + ' [SEP] ' + str(ele['reference']) + ' [SEP]' for ele in data]
         inputs = self.tokenizer.transform(inputs)
         return self.type_model.predict_proba(inputs), self.type_model.predict_log_proba(inputs)
 
@@ -80,7 +80,7 @@ class PEDANT:
         f1_scores, precisions, recalls = [], [], []
 
         for i in range(len(rule_data)):
-            f1, p, r = calculate_f1_score_with_precision(lemmatize_text(normalize_answer(str(rule_data[i]['reference']))), lemmatize_text(normalize_answer(str(rule_data[i]['candidate']))))
+            f1, p, r = calculate_f1_score_with_precision(str(rule_data[i]['reference']), str(rule_data[i]['candidate']))
             f1_scores.append(f1)
             precisions.append(p)
             recalls.append(r)
@@ -94,11 +94,12 @@ class PEDANT:
     def construct_features(self, data, with_log_probas=False):
         in_texts = []
         for ele in data:
-            text = '[CLS] ' + lemmatize_text(normalize_answer(str(ele['question']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['reference']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['candidate']))) + ' [SEP]'
+            # text = '[CLS] ' + lemmatize_text(normalize_answer(str(ele['question']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['reference']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['candidate']))) + ' [SEP]'
+            text = '[CLS] ' + str(ele['question']) + ' [SEP] ' + str(ele['reference']) + ' [SEP] ' + str(ele['candidate']) + ' [SEP]'
             # input_text = vectorizer.transform(text)
             in_texts.append(text)
 
-        print(in_texts)
+        # print(in_texts)
         in_texts = self.tokenizer.transform(in_texts)
         f1, p, r = self.get_f1_features(data)
 
