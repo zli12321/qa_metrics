@@ -7,6 +7,8 @@
 
 > `pip install qa-metrics` is all you need!
 
+> 🤗 Huggingface [Model](https://huggingface.co/zli12321/roberta-large-qa-evaluator) and [Dataset](https://huggingface.co/datasets/zli12321/pedants_qa_evaluation_bench)
+
 ## 🎉 Latest Updates
 
 - **Version 0.2.19 Released!**
