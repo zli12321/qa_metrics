@@ -6,19 +6,26 @@ import os
 
 
 class PEDANT:
-    def __init__(self): 
+    def __init__(self, fast_eval=True, fast_model=False): 
         current_dir = os.path.dirname(__file__)
         model_dir = os.path.join(current_dir, 'classifier') 
         model_path = os.path.join(model_dir, 'lr_classifier.pkl') 
         vectorizer_path = os.path.join(model_dir, 'tf-idf_vectorizer.pkl') 
         rule_clf_path = os.path.join(model_dir, 'rule_classifier.pkl') 
         type_clf_path = os.path.join(model_dir, 'type_classifier.pkl') 
+        light_model_path = os.path.join(model_dir, 'light_lr_classifier.pkl') 
+        light_vectorizer_path = os.path.join(model_dir, 'light_tf-idf_vectorizer.pkl') 
+
 
         clf_url = 'https://github.com/zli12321/pedant_models/raw/refs/heads/main/lr_classifier' 
         rule_clf_url = 'https://github.com/zli12321/pedant_models/raw/refs/heads/main/rule_classifier'
         type_clf_url = 'https://github.com/zli12321/pedant_models/raw/refs/heads/main/type_classifier'
-        vectorizer_url = 'https://github.com/zli12321/pedant_models/raw/refs/heads/main/tf-idf_vectorizer' 
+        vectorizer_url = 'https://github.com/zli12321/pedant_models/raw/refs/heads/main/tf-idf_vectorizer'
+        light_clf_url = ''
+        light_vectorizer_url = ''
 
+        self.fast_eval = fast_eval
+        self.fast_model = fast_model
 
         if True:
             if not os.path.exists(model_dir): 
@@ -29,6 +36,9 @@ class PEDANT:
                 download_link(vectorizer_path, vectorizer_url, 'Tokenizer') 
                 download_link(rule_clf_path, rule_clf_url, 'Rule feature extractor') 
                 download_link(type_clf_path, type_clf_url, 'Type feature extractor') 
+                download_link(light_model_path, light_clf_url, 'Light PEDANT model') 
+                download_link(light_vectorizer_path, light_vectorizer_url, 'Light Tokenizer') 
+                
             except:
                 pass
 
@@ -37,6 +47,10 @@ class PEDANT:
         self.tokenizer = joblib.load(vectorizer_path)
         self.rule_model = joblib.load(rule_clf_path)
         self.type_model = joblib.load(type_clf_path)
+
+        if self.fast_model == True:
+            self.light_model = joblib.load(light_model_path)
+            self.light_tokenizer = joblib.load(light_vectorizer_path)
 
     def download_latest_model(self):
         current_dir = os.path.dirname(__file__) 
@@ -91,10 +105,30 @@ class PEDANT:
 
         return f1_scores, precisions, recalls
 
+    def contruct_light_features(self, data):
+        in_texts = []
+        for ele in data:
+            # text = '[CLS] ' + lemmatize_text(normalize_answer(str(ele['question']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['reference']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['candidate']))) + ' [SEP]'
+            
+            text = '[CLS] ' + str(ele['question']) + ' [SEP] ' + str(ele['reference']) + ' [SEP] ' + str(ele['candidate']) + ' [SEP]'
+            # input_text = vectorizer.transform(text)
+            in_texts.append(text)
+
+        # print(in_texts)
+        in_texts = self.tokenizer.transform(in_texts)
+        f1, p, r = self.get_f1_features(data)
+
+       
+        all_feats = hstack([f1, p, r, in_texts])
+
+
+        return all_feats
+
     def construct_features(self, data, with_log_probas=False):
         in_texts = []
         for ele in data:
             # text = '[CLS] ' + lemmatize_text(normalize_answer(str(ele['question']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['reference']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['candidate']))) + ' [SEP]'
+            
             text = '[CLS] ' + str(ele['question']) + ' [SEP] ' + str(ele['reference']) + ' [SEP] ' + str(ele['candidate']) + ' [SEP]'
             # input_text = vectorizer.transform(text)
             in_texts.append(text)
@@ -119,9 +153,14 @@ class PEDANT:
     reference, candidate, and question are strings.
     '''
     def get_score(self, reference, candidate, question):
-        reference = lemmatize_text(normalize_answer(str(reference)))
-        candidate = lemmatize_text(normalize_answer(str(candidate)))
-        question = lemmatize_text(normalize_answer(str(question)))
+        if self.fast_eval == False:
+            reference = lemmatize_text(normalize_answer(str(reference)))
+            candidate = lemmatize_text(normalize_answer(str(candidate)))
+            question = lemmatize_text(normalize_answer(str(question)))
+        else:
+            reference = normalize_answer(str(reference))
+            candidate = normalize_answer(str(candidate))
+            question = normalize_answer(str(question))
 
         if reference in candidate:
             return 1.0
@@ -132,8 +171,14 @@ class PEDANT:
             'question': question
         }]
 
-        feature = self.construct_features(data)
-        pred_probas = self.model.predict_proba(feature)
+
+        if self.fast_model == False:
+            feature = self.construct_features(data)
+            pred_probas = self.model.predict_proba(feature)
+        else:
+            feature = self.contruct_light_features(data)
+            pred_probas = self.light_model.predict_proba(feature)
+        
         return pred_probas[0][0]
 
     '''
@@ -183,12 +228,19 @@ class PEDANT:
     '''
     def get_question_type(self, reference, question):
         if isinstance(reference, list):
-            inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(question))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ref))) + ' [SEP]' for ref in reference]
+            if self.fast_eval == False:
+                inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(question))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ref))) + ' [SEP]' for ref in reference]
+            else:
+                inputs = ['[CLS] ' + normalize_answer(str(question)) + ' [SEP] ' + normalize_answer(str(ref)) + ' [SEP]' for ref in reference]
             inputs = self.tokenizer.transform(inputs)
             outs = self.type_model.predict(inputs)
             return list(set(outs))
         else:
-            inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(question))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(reference))) + ' [SEP]']
+            if self.fast_eval == False:
+                inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(question))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(reference))) + ' [SEP]']
+            else:
+                inputs = ['[CLS] ' + normalize_answer(str(question)) + ' [SEP] ' + normalize_answer(str(reference)) + ' [SEP]']
+
             inputs = self.tokenizer.transform(inputs)
             return self.type_model.predict(inputs)[0]
 
@@ -200,7 +252,11 @@ class PEDANT:
                 'candidate': candidate
             } for ref in reference]
 
-            inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(ele['question']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['reference']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['candidate']))) + ' [SEP]' for ele in data]
+            if self.fast_eval == False:
+                inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(ele['question']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['reference']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['candidate']))) + ' [SEP]' for ele in data]
+            else:
+                inputs = ['[CLS] ' + normalize_answer(str(ele['question'])) + ' [SEP] ' + normalize_answer(str(ele['reference'])) + ' [SEP] ' + normalize_answer(str(ele['candidate'])) + ' [SEP]' for ele in data]
+            
             f1, p, r = self.get_f1_features(data)
             inputs = self.tokenizer.transform(inputs)
 
@@ -224,7 +280,11 @@ class PEDANT:
                 'candidate': candidate
             }]
 
-            inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(ele['question']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['reference']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['candidate']))) + ' [SEP]' for ele in data]
+            if self.fast_eval == False:
+                inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(ele['question']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['reference']))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ele['candidate']))) + ' [SEP]' for ele in data]
+            else:
+                inputs = ['[CLS] ' + normalize_answer(str(ele['question'])) + ' [SEP] ' + normalize_answer(str(ele['reference'])) + ' [SEP] ' + normalize_answer(str(ele['candidate'])) + ' [SEP]' for ele in data]
+
             f1, p, r = self.get_f1_features(data)
             inputs = self.tokenizer.transform(inputs)
 
@@ -267,9 +327,14 @@ class PEDANT:
         judgment = False
         input_texts = []
         if isinstance(reference, list) and isinstance(candidate, list):
-            references = [lemmatize_text(normalize_answer(str(ele))) for ele in reference]
-            candidates = [lemmatize_text(normalize_answer(str(ele))) for ele in candidate]
-            question = lemmatize_text(normalize_answer(str(question)))
+            if self.fast_eval == False:
+                references = [lemmatize_text(normalize_answer(str(ele))) for ele in reference]
+                candidates = [lemmatize_text(normalize_answer(str(ele))) for ele in candidate]
+                question = lemmatize_text(normalize_answer(str(question)))
+            else:
+                references = [normalize_answer(str(ele)) for ele in reference]
+                candidates = [normalize_answer(str(ele)) for ele in candidate]
+                question = normalize_answer(str(question))
 
             for candidate in candidates:
                 if judgment == False:
@@ -282,9 +347,14 @@ class PEDANT:
                                             'question': question
                                             })
         elif isinstance(reference, list):
-            references = [lemmatize_text(normalize_answer(str(ele))) for ele in reference]
-            candidate = lemmatize_text(normalize_answer(str(candidate)))
-            question = lemmatize_text(normalize_answer(str(question)))
+            if self.fast_eval == False:
+                references = [lemmatize_text(normalize_answer(str(ele))) for ele in reference]
+                candidate = lemmatize_text(normalize_answer(str(candidate)))
+                question = lemmatize_text(normalize_answer(str(question)))
+            else:
+                references = [normalize_answer(str(ele)) for ele in reference]
+                candidate = normalize_answer(str(candidate))
+                question = normalize_answer(str(question))
 
             for reference in references:
                 if reference in candidate:
@@ -295,9 +365,14 @@ class PEDANT:
                                     'question': question
                                      })
         elif isinstance(candidate, list):
-            candidates = [lemmatize_text(normalize_answer(str(ele))) for ele in candidate]
-            reference = lemmatize_text(normalize_answer(str(reference)))
-            question = lemmatize_text(normalize_answer(str(question)))
+            if self.fast_eval == False:
+                candidates = [lemmatize_text(normalize_answer(str(ele))) for ele in candidate]
+                reference = lemmatize_text(normalize_answer(str(reference)))
+                question = lemmatize_text(normalize_answer(str(question)))
+            else:
+                candidates = [normalize_answer(str(ele)) for ele in candidate]
+                reference = normalize_answer(str(reference))
+                question = normalize_answer(str(question))
 
 
             for candidate in candidates:
@@ -309,9 +384,14 @@ class PEDANT:
                                     'question': question
                                      })
         else:
-            reference = lemmatize_text(normalize_answer(str(reference)))
-            candidate = lemmatize_text(normalize_answer(str(candidate)))
-            question = lemmatize_text(normalize_answer(str(question)))
+            if self.fast_eval == False:
+                reference = lemmatize_text(normalize_answer(str(reference)))
+                candidate = lemmatize_text(normalize_answer(str(candidate)))
+                question = lemmatize_text(normalize_answer(str(question)))
+            else:
+                reference = normalize_answer(str(reference))
+                candidate = normalize_answer(str(candidate))
+                question = normalize_answer(str(question))
 
             if reference in candidate:
                 return True
@@ -321,9 +401,13 @@ class PEDANT:
                                 'question': question
                                 })
 
+        if self.fast_model == False:
+            features = self.construct_features(input_texts)
+            preds = self.model.predict(features)
+        else:
+            features = self.contruct_light_features(input_texts)
+            preds = self.light_model.predict(features)
 
-        features = self.construct_features(input_texts)
-        preds = self.model.predict(features)
 
 
 
