@@ -25,6 +25,27 @@ def f1_score_with_precision_recall(reference, candidate):
     return {'f1': f1_score, 'precision': precision, 'recall': recall}
 
 
+def f1_score_with_precision_recall_normalized(reference, candidate):
+    # Split the strings into sets of words
+    # reference = lemmatize_text(normalize_answer(str(reference)))
+    # candidate = lemmatize_text(normalize_answer(str(candidate)))
+    words_reference = set(reference.split())
+    words_candidate = set(candidate.split())
+
+    # Calculate true positives, false positives, and false negatives
+    tp = len(words_reference.intersection(words_candidate))
+    fp = len(words_reference - words_candidate)
+    fn = len(words_candidate - words_reference)
+
+    # Calculate precision and recall
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+
+    # Calculate F1 score
+    f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
+
+    return {'f1': f1_score, 'precision': precision, 'recall': recall}
+
 '''
 Return the F1 score of the candidate answer given the reference answer
 '''
@@ -38,7 +59,11 @@ def f1_score(reference, candidate):
 Given a reference answer and a candidate answer, return True if the F1 score is greater than the threshold
 '''
 def f1_match(reference, candidate, threshold=0.5):
+    if len(reference) == 0 or len(candidate) == 0:
+            return False
+    
     if isinstance(reference, list) and isinstance(candidate, list):
+        
         references = [lemmatize_text(normalize_answer(str(ele))) for ele in reference]
         candidates = [lemmatize_text(normalize_answer(str(ele))) for ele in candidate]
 

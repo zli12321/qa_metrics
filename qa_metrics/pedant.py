@@ -153,6 +153,9 @@ class PEDANT:
     reference, candidate, and question are strings.
     '''
     def get_score(self, reference, candidate, question):
+        if len(reference) == 0 or len(candidate) == 0:
+            return 0
+
         if self.fast_eval == False:
             reference = lemmatize_text(normalize_answer(str(reference)))
             candidate = lemmatize_text(normalize_answer(str(candidate)))
@@ -227,6 +230,9 @@ class PEDANT:
     return the type of the question
     '''
     def get_question_type(self, reference, question):
+        if len(reference) == 0:
+            return ['Empty reference']
+    
         if isinstance(reference, list):
             if self.fast_eval == False:
                 inputs = ['[CLS] ' + lemmatize_text(normalize_answer(str(question))) + ' [SEP] ' + lemmatize_text(normalize_answer(str(ref))) + ' [SEP]' for ref in reference]
@@ -245,7 +251,13 @@ class PEDANT:
             return self.type_model.predict(inputs)[0]
 
     def get_judgement_rule(self, reference, candidate, question):
+        if len(reference) == 0:
+            return ['Empty reference']
+        if len(candidate) == 0:
+            return ['Empty candidate']
+        
         if isinstance(reference, list):
+
             data = [{
                 'question': question,
                 'reference': ref,
@@ -274,6 +286,7 @@ class PEDANT:
             rules = [rules[idx] for idx in out_rule_num]
             return list(set(rules))
         else:
+
             data = [{
                 'question': question,
                 'reference': reference,
@@ -327,6 +340,10 @@ class PEDANT:
         judgment = False
         input_texts = []
         if isinstance(reference, list) and isinstance(candidate, list):
+            if len(reference) == 0 or len(candidate) == 0:
+                return False
+            
+
             if self.fast_eval == False:
                 references = [lemmatize_text(normalize_answer(str(ele))) for ele in reference]
                 candidates = [lemmatize_text(normalize_answer(str(ele))) for ele in candidate]
@@ -347,6 +364,9 @@ class PEDANT:
                                             'question': question
                                             })
         elif isinstance(reference, list):
+            if len(reference) == 0 or len(candidate) == 0:
+                return False
+            
             if self.fast_eval == False:
                 references = [lemmatize_text(normalize_answer(str(ele))) for ele in reference]
                 candidate = lemmatize_text(normalize_answer(str(candidate)))
@@ -365,6 +385,10 @@ class PEDANT:
                                     'question': question
                                      })
         elif isinstance(candidate, list):
+            if len(reference) == 0 or len(candidate) == 0:
+                return False
+            
+
             if self.fast_eval == False:
                 candidates = [lemmatize_text(normalize_answer(str(ele))) for ele in candidate]
                 reference = lemmatize_text(normalize_answer(str(reference)))
@@ -384,6 +408,10 @@ class PEDANT:
                                     'question': question
                                      })
         else:
+            if len(reference) == 0 or len(candidate) == 0:
+                return False
+              
+            
             if self.fast_eval == False:
                 reference = lemmatize_text(normalize_answer(str(reference)))
                 candidate = lemmatize_text(normalize_answer(str(candidate)))

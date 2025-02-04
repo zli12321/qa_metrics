@@ -3,7 +3,7 @@ from .em import em_match
 import torch
 
 class TransformerMatcher:
-    def __init__(self, model='bert'):
+    def __init__(self, model='zli12321/roberta-large-qa-evaluator'):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(f"Using device: {self.device}")
         '''
@@ -86,50 +86,62 @@ class TransformerMatcher:
             self.model = AutoModelForSequenceClassification.from_pretrained(model_path, config=config, cache_dir=model_dir).to(self.device)
             self.tokenizer = AutoTokenizer.from_pretrained(model_path, cache_dir=model_dir)
         else:
-            model_path = model
-            if 'roberta' in model.lower():
-                from transformers import RobertaForSequenceClassification, RobertaTokenizer, RobertaConfig
-                model_dir = os.path.join(current_dir, 'transformer_models/' + model_path)
-                
-                # Ensure the target directory exists
-                if not os.path.exists(model_dir):
-                    os.makedirs(model_dir)
+            from transformers import RobertaForSequenceClassification, RobertaTokenizer, RobertaConfig
+            model_dir = os.path.join(current_dir, 'transformer_models/roberta-large')
+            
+            # Ensure the target directory exists
+            if not os.path.exists(model_dir):
+                os.makedirs(model_dir)
 
-                config = RobertaConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
-                self.model = RobertaForSequenceClassification.from_pretrained(model_path, cache_dir=model_dir).to(self.device)
-                self.tokenizer = RobertaTokenizer.from_pretrained(model_path, cache_dir=model_dir)
-            elif 'distilbert' in model.lower():
-                from transformers import DistilBertForSequenceClassification, DistilBertConfig, DistilBertTokenizer
-                model_dir = os.path.join(current_dir, 'transformer_models/distilbert')
+            model_path = 'zli12321/roberta-large-qa-evaluator'
+            config = RobertaConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            self.model = RobertaForSequenceClassification.from_pretrained(model_path, cache_dir=model_dir).to(self.device)
+            self.tokenizer = RobertaTokenizer.from_pretrained(model_path, cache_dir=model_dir)
 
-                # Ensure the target directory exists
-                if not os.path.exists(model_dir):
-                    os.makedirs(model_dir)
-                self.tokenizer = DistilBertTokenizer.from_pretrained(model_path)
-                config = DistilBertConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
-                self.model = DistilBertForSequenceClassification.from_pretrained(model_path, config=config).to(self.device)
-            elif 'tiny-bert' in model.lower():
-                from transformers import AutoTokenizer, AutoModelForSequenceClassification
-                model_dir = os.path.join(current_dir, 'transformer_models/tiny_bert')
+            # model_path = model
+            # if 'roberta' in model.lower():
+            #     from transformers import RobertaForSequenceClassification, RobertaTokenizer, RobertaConfig
+            #     model_dir = os.path.join(current_dir, 'transformer_models/' + model_path)
                 
-                # Ensure the target directory exists
-                if not os.path.exists(model_dir):
-                    os.makedirs(model_dir)
+            #     # Ensure the target directory exists
+            #     if not os.path.exists(model_dir):
+            #         os.makedirs(model_dir)
 
-                config= AutoModelForSequenceClassification.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
-                self.model = AutoModelForSequenceClassification.from_pretrained(model_path, config=config, cache_dir=model_dir).to(self.device)
-                self.tokenizer = AutoTokenizer.from_pretrained(model_path, cache_dir=model_dir)
-            elif 'bert' in model.lower():
-                from transformers import BertForSequenceClassification, BertTokenizer, BertConfig
-                model_dir = os.path.join(current_dir, 'transformer_models/bert')
+            #     config = RobertaConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            #     self.model = RobertaForSequenceClassification.from_pretrained(model_path, cache_dir=model_dir).to(self.device)
+            #     self.tokenizer = RobertaTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+            # elif 'distilbert' in model.lower():
+            #     from transformers import DistilBertForSequenceClassification, DistilBertConfig, DistilBertTokenizer
+            #     model_dir = os.path.join(current_dir, 'transformer_models/distilbert')
+
+            #     # Ensure the target directory exists
+            #     if not os.path.exists(model_dir):
+            #         os.makedirs(model_dir)
+            #     self.tokenizer = DistilBertTokenizer.from_pretrained(model_path)
+            #     config = DistilBertConfig.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            #     self.model = DistilBertForSequenceClassification.from_pretrained(model_path, config=config).to(self.device)
+            # elif 'tiny-bert' in model.lower():
+            #     from transformers import AutoTokenizer, AutoModelForSequenceClassification
+            #     model_dir = os.path.join(current_dir, 'transformer_models/tiny_bert')
                 
-                # Ensure the target directory exists
-                if not os.path.exists(model_dir):
-                    os.makedirs(model_dir)
+            #     # Ensure the target directory exists
+            #     if not os.path.exists(model_dir):
+            #         os.makedirs(model_dir)
+
+            #     config= AutoModelForSequenceClassification.from_pretrained(model_path, hidden_dropout_prob=0.1, attention_probs_dropout_prob=0.1)
+            #     self.model = AutoModelForSequenceClassification.from_pretrained(model_path, config=config, cache_dir=model_dir).to(self.device)
+            #     self.tokenizer = AutoTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+            # elif 'bert' in model.lower():
+            #     from transformers import BertForSequenceClassification, BertTokenizer, BertConfig
+            #     model_dir = os.path.join(current_dir, 'transformer_models/bert')
                 
-                config= BertConfig.from_pretrained(model_path)
-                self.model = BertForSequenceClassification.from_pretrained(model_path, config=config, cache_dir=model_dir).to(self.device)
-                self.tokenizer = BertTokenizer.from_pretrained(model_path, cache_dir=model_dir)
+            #     # Ensure the target directory exists
+            #     if not os.path.exists(model_dir):
+            #         os.makedirs(model_dir)
+                
+            #     config= BertConfig.from_pretrained(model_path)
+            #     self.model = BertForSequenceClassification.from_pretrained(model_path, config=config, cache_dir=model_dir).to(self.device)
+            #     self.tokenizer = BertTokenizer.from_pretrained(model_path, cache_dir=model_dir)
 
     def download_latest_model(self, model='roberta'):
         current_dir = os.path.dirname(__file__)
@@ -203,6 +215,9 @@ class TransformerMatcher:
     reference, candidate, and question are strings.
     '''
     def get_score(self, reference, candidate, question):
+        if len(reference) == 0 or len(candidate) == 0:
+            return False
+
         if em_match(reference, candidate) == True:
             return 1.0
         input_text = "[CLS] " +str(candidate) + " [SEP] " +str(reference) + " [SEP] " +question + " [SEP]"
@@ -303,6 +318,9 @@ class TransformerMatcher:
     Return True if the candidate answer is above the threshold value. Else, False.
     '''
     def transformer_match(self, reference, candidate, question, threshold=0.5):
+        if len(reference) == 0 or len(candidate) == 0:
+            return False
+
         if em_match(reference, candidate) == True:
             return True
         judgment = False
