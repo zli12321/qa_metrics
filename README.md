@@ -271,14 +271,25 @@ Our fine-tuned models are available on Huggingface:
 ## 📄 Citation
 
 ```bibtex
-@misc{li2024pedantspreciseevaluationsdiverse,
-      title={PEDANTS: Cheap but Effective and Interpretable Answer Equivalence}, 
-      author={Zongxia Li and Ishani Mondal and Yijun Liang and Huy Nghiem and Jordan Lee Boyd-Graber},
-      year={2024},
-      eprint={2402.11161},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2402.11161}, 
+@inproceedings{li-etal-2024-pedants,
+    title = "{PEDANTS}: Cheap but Effective and Interpretable Answer Equivalence",
+    author = "Li, Zongxia  and
+      Mondal, Ishani  and
+      Nghiem, Huy  and
+      Liang, Yijun  and
+      Boyd-Graber, Jordan Lee",
+    editor = "Al-Onaizan, Yaser  and
+      Bansal, Mohit  and
+      Chen, Yun-Nung",
+    booktitle = "Findings of the Association for Computational Linguistics: EMNLP 2024",
+    month = nov,
+    year = "2024",
+    address = "Miami, Florida, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.findings-emnlp.548/",
+    doi = "10.18653/v1/2024.findings-emnlp.548",
+    pages = "9373--9398",
+    abstract = "Question answering (QA) can only make progress if we know if an answer is correct, but current answer correctness (AC) metrics struggle with verbose, free-form answers from large language models (LLMs). There are two challenges with current short-form QA evaluations: a lack of diverse styles of evaluation data and an over-reliance on expensive and slow LLMs. LLM-based scorers correlate better with humans, but this expensive task has only been tested on limited QA datasets. We rectify these issues by providing rubrics and datasets for evaluating machine QA adopted from the Trivia community. We also propose an efficient, and interpretable QA evaluation that is more stable than an exact match and neural methods (BERTScore)."
 }
 ```
 
