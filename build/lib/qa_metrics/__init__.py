@@ -1,6 +1,7 @@
 import requests
 import os
 from .utils.tools import download_link
+import nltk
 
 
 def download(model_name):

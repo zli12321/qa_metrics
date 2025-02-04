@@ -15,6 +15,8 @@ nltk.download('averaged_perceptron_tagger')
 nltk.download('punkt')
 nltk.download('wordnet')
 nltk.download('omw-1.4')
+nltk.download('punkt_tab')
+nltk.download('averaged_perceptron_tagger_eng')
 
 lemmatizer = WordNetLemmatizer()
 
@@ -55,8 +57,8 @@ def normalize_answer(text, lower=True):
 
 def calculate_f1_score_with_precision(str1, str2):
     # Split the strings into sets of words
-    str1 = fix_answer(contractions.fix(normalize_answer(str1)))
-    str2 = fix_answer(contractions.fix(normalize_answer(str2)))
+    # str1 = fix_answer(contractions.fix(normalize_answer(str1)))
+    # str2 = fix_answer(contractions.fix(normalize_answer(str2)))
     words_str1 = set(str1.split())
     words_str2 = set(str2.split())
 
