@@ -12,7 +12,7 @@
 ## 🎉 Latest Updates
 
 - **Version 0.2.19 Released!**
-  - Paper accepted to EMNLP 2024 Findings! 🎓
+  - Paper in EMNLP 2024! 🎓
   - Enhanced PEDANTS with multi-pipeline support and improved edge case handling
   - Added support for OpenAI GPT-series and Claude Series models (OpenAI version > 1.0)
   - Integrated support for open-source models (LLaMA-2-70B-chat, LLaVA-1.5, etc.) via [deepinfra](https://deepinfra.com/models)
