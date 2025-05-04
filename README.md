@@ -10,18 +10,20 @@
 > 🤗 Huggingface [Model](https://huggingface.co/zli12321/roberta-large-qa-evaluator) and [Dataset](https://huggingface.co/datasets/zli12321/pedants_qa_evaluation_bench)
 
 ## 🎉 Latest Updates
+- **Version 0.2.33 Released! (05/04/2025)**
+  - RewardBert (ModerBert base) trained to evaluate both short-form and long-form generations.
+  - RewardBert outputs a likert scale between 1-5 or normalized score between 0-1.
 
 - **Version 0.2.30 Released!**
   - Enhanced PEDANTS with multi-pipeline support and improved edge case handling
-  - Added support for OpenAI GPT-series and Claude Series models (OpenAI version > 1.0)
-  - Integrated support for open-source models (LLaMA-2-70B-chat, LLaVA-1.5, etc.) via [deepinfra](https://deepinfra.com/models)
   - Introduced trained tiny-bert for QA evaluation (18MB model size)
   - Added direct Huggingface model download support for TransformerMatcher
 
 ## 🚀 Quick Start
 
 ## Table of Contents
-* 1. [Normalized Exact Match](#em)
+* 1. [RewardBert](#BERT)
+* 2. [Normalized Exact Match](#em)
 * 2. [Token F1 Score](#f1)
 * 3. [PEDANTS](#pedants)
 * 4. [Finetuned Neural Matching](#neural)
@@ -42,6 +44,7 @@ Our package offers six QA evaluation methods with varying strengths:
 
 | Method | Best For | Cost | Correlation with Human Judgment |
 |--------|----------|------|--------------------------------|
+| RewardBert | General Text Generations | Free | Very High |
 | Normalized Exact Match | Short-form QA (NQ-OPEN, HotpotQA, etc.) | Free | Good |
 | PEDANTS | Both short & medium-form QA | Free | Very High |
 | [Neural Evaluation](https://huggingface.co/zli12321/answer_equivalence_tiny_bert) | Both short & long-form QA | Free | High |
@@ -52,7 +55,27 @@ Our package offers six QA evaluation methods with varying strengths:
 
 ## 📖 Documentation
 
-### 1. <a name='em'></a>Normalized Exact Match
+### 1. <a name='BERT'></a>RewardBert
+
+#### Method: `compute_score`
+**Parameters**
+- `reference_answer` (list of str): A list of gold (correct) answers to the question
+- `candidate_answer` (str): The answer provided by a candidate that needs to be evaluated
+
+**Returns**
+- `tuple`: A tuple of normalized and raw scores.
+
+```python
+from qa_metrics.RewardBert import RewardBert
+
+rb = RewardBert(device='cuda')
+reference_answer = "The Frog Prince"
+candidate_answer = "The movie \"The Princess and the Frog\" is loosely based off the Brother Grimm's \"Iron Henry\""
+rb.compute_score(reference_answer, candidate_answer)
+# (0.29113227128982544, 2.1645290851593018)
+```
+
+### 2. <a name='em'></a>Normalized Exact Match
 
 #### Method: `em_match`
 **Parameters**
@@ -70,7 +93,7 @@ candidate_answer = "The movie \"The Princess and the Frog\" is loosely based off
 match_result = em_match(reference_answer, candidate_answer)
 ```
 
-### 2. <a name='f1'></a>F1 Score
+### 3. <a name='f1'></a>F1 Score
 
 #### Method: `f1_score_with_precision_recall`
 **Parameters**
@@ -96,7 +119,7 @@ f1_stats = f1_score_with_precision_recall(reference_answer[0], candidate_answer)
 match_result = f1_match(reference_answer, candidate_answer, threshold=0.5)
 ```
 
-### 3. <a name='pedants'></a>PEDANTS
+### 4. <a name='pedants'></a>PEDANTS
 
 #### Method: `get_score`
 **Parameters**
@@ -159,7 +182,7 @@ scores = pedant.get_scores(reference_answer, candidate_answer, question)
 match_result = pedant.evaluate(reference_answer, candidate_answer, question)
 ```
 
-### 4. <a name='neural'></a>Transformer Neural Evaluation
+### 5. <a name='neural'></a>Transformer Neural Evaluation
 
 #### Method: `get_score`
 **Parameters**
@@ -205,7 +228,7 @@ tm = TransformerMatcher("zli12321/answer_equivalence_tiny_bert")
 match_result = tm.transformer_match(reference_answer, candidate_answer, question)
 ```
 
-### 5. <a name='llm'></a>LLM Integration
+### 6. <a name='llm'></a>LLM Integration
 
 #### Method: `prompt_gpt`
 **Parameters**
