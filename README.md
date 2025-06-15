@@ -10,9 +10,10 @@
 > 🤗 Huggingface [Model](https://huggingface.co/zli12321/roberta-large-qa-evaluator) and [Dataset](https://huggingface.co/datasets/zli12321/pedants_qa_evaluation_bench)
 
 ## 🎉 Latest Updates
-- **Version 0.2.33 Released! (05/04/2025)**
+- **Version 0.2.34 Released! (05/04/2025)**
   - RewardBert (ModerBert base) trained to evaluate both short-form and long-form generations.
   - RewardBert outputs a likert scale between 1-5 or normalized score between 0-1.
+  - Turn off nltk download verbose logs.
 
 - **Version 0.2.30 Released!**
   - Enhanced PEDANTS with multi-pipeline support and improved edge case handling
