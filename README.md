@@ -97,6 +97,8 @@ reference_answer = ["The Frog Prince"]
 candidate_answer = ["The movie \"The Princess and the Frog\" is loosely based off the Brother Grimm's \"Iron Henry\""]
 rb.compute_batch_scores(reference_answer, candidate_answer, batch_size=1)
 # ([0.29113227128982544], [2.1645290851593018])
+```
+
 
 ### 2. <a name='em'></a>Normalized Exact Match
 
