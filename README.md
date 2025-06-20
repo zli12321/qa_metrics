@@ -10,6 +10,9 @@
 > 🤗 Huggingface [Model](https://huggingface.co/zli12321/roberta-large-qa-evaluator) and [Dataset](https://huggingface.co/datasets/zli12321/pedants_qa_evaluation_bench)
 
 ## 🎉 Latest Updates
+- **Version 0.2.37 Released! (06/20/2025)**
+  - RewardBert (ModerBert base) supports batch scores prediction to speed up prediction for RL training.
+
 - **Version 0.2.35 Released! (06/18/2025)**
   - RewardBert (ModerBert base) trained to evaluate both short-form and long-form generations.
   - RewardBert outputs a likert scale between 1-5 or normalized score between 0-1.
@@ -60,7 +63,7 @@ Our package offers six QA evaluation methods with varying strengths:
 
 #### Method: `compute_score`
 **Parameters**
-- `reference_answer` (list of str): A list of gold (correct) answers to the question
+- `reference_answer` (str): gold (correct) answer to the question
 - `candidate_answer` (str): The answer provided by a candidate that needs to be evaluated
 
 **Returns**
@@ -75,6 +78,25 @@ candidate_answer = "The movie \"The Princess and the Frog\" is loosely based off
 rb.compute_score(reference_answer, candidate_answer)
 # (0.29113227128982544, 2.1645290851593018)
 ```
+
+
+#### Method: `compute_batch_scores`
+**Parameters**
+- `reference_answers` (list of str): A list of gold (correct) answers to the question
+- `candidate_answer` (list of str): A list of answers provided by a candidate that needs to be evaluated
+- `batch_size` (int): batch size to predict (default 1)
+
+**Returns**
+- `tuple`: A tuple of a list of normalized and raw scores.
+
+```python
+from qa_metrics.RewardBert import RewardBert
+
+rb = RewardBert(device='cuda')
+reference_answer = ["The Frog Prince"]
+candidate_answer = ["The movie \"The Princess and the Frog\" is loosely based off the Brother Grimm's \"Iron Henry\""]
+rb.compute_batch_scores(reference_answer, candidate_answer, batch_size=1)
+# ([0.29113227128982544], [2.1645290851593018])
 
 ### 2. <a name='em'></a>Normalized Exact Match
 
