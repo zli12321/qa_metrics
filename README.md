@@ -10,7 +10,7 @@
 > 🤗 Huggingface [Model](https://huggingface.co/zli12321/roberta-large-qa-evaluator) and [Dataset](https://huggingface.co/datasets/zli12321/pedants_qa_evaluation_bench)
 
 ## Release Updates
-- **Version 0.2.40 Released! (06/20/2025)**
+- **Version 0.2.42 Released! (06/20/2025)**
   - RewardBert (ModerBert base) supports batch scores prediction to speed up prediction for RL training.
 
 - **Version 0.2.35 Released! (06/18/2025)**
